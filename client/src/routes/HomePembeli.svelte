@@ -6,13 +6,19 @@
 
   import ProductDetails from "./ProductDetails.svelte";
 
+//   import dotenv from 'dotenv';
+
+// dotenv.config();
+  console.log(process.env.JWT_SECRET);
+
   let products = [];
   async function getProducts() {
     // Drawer.update((sendValue) => true);
 
+    const urlnya = "https://8003-fxddev-ecommerce-ap36jylnyck.ws-us71.gitpod.io/products"
     var config = {
       method: "get",
-      url: "https://api-ecommerce-2s1x.onrender.com/products",
+      url: urlnya,
     };
 
     try {
@@ -21,6 +27,7 @@
       console.log(data);
 
       products = data.data;
+      console.log(urlnya);
     } catch (error) {
       console.error(`Axios error..: ${error}`);
     }
