@@ -1,0 +1,4 @@
+copy From
+D:\MyExplore\Website\Front_End\Svelte\Coding\Template\svelte-vite-tailwindcss-daisyui-template
+&
+dirouting

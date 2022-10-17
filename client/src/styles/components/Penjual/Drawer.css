@@ -1,0 +1,9 @@
+.header__sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.content__result{
+    padding-top: 80px;
+}
