@@ -12,7 +12,7 @@
 
     var config = {
       method: "get",
-      url: "http://localhost:8003/products",
+      url: "https://api-ecommerce-2s1x.onrender.com/products",
     };
 
     try {
