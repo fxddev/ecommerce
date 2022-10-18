@@ -10,6 +10,7 @@ const jwt = require('jsonwebtoken')
 const auth_reuse = require("../components/auth_reuse")
 
 const jwt_secret = process.env.JWT_SECRET;
+const pass_key = process.env.PASS_KEY;
 
 exports.signUp = async (req, res) => {
 
