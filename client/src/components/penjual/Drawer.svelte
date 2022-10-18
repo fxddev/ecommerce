@@ -13,10 +13,32 @@
   // });
 </script>
 
-<div class="drawer">
+<div class="drawer drawer-mobile">
+  <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content flex flex-col items-center justify-center">
+    <!-- Page content here -->
+    <label for="my-drawer-2" class="btn btn-primary drawer-button lg:hidden"
+      >Open drawer</label
+    >
+    <div>
+      <slot />
+    </div>
+  </div>
+  <div class="drawer-side">
+    <label for="my-drawer-2" class="drawer-overlay" />
+    <ul class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
+      <!-- Sidebar content here -->
+      <li><Link to="/seller">Home</Link></li>
+      <li><Link to="/seller/chat">Chat</Link></li>
+      <li><Link to="/seller/produk">Produk</Link></li>
+      <li><Link to="/seller/pesanan">Pesanan</Link></li>
+    </ul>
+  </div>
+</div>
+
+<!-- <div class="drawer">
   <input id="my-drawer" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">
-    <!-- Page content here -->
     {#if get_cred != null}
       <div class="header__sticky">
         <label for="my-drawer" class="btn btn-primary drawer-button"
@@ -32,11 +54,10 @@
   <div class="drawer-side">
     <label for="my-drawer" class="drawer-overlay" />
     <ul class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
-      <!-- Sidebar content here -->
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/chat">Chat</Link></li>
-      <li><Link to="/produk">Produk</Link></li>
-      <li><Link to="/pesanan">Pesanan</Link></li>
+      <li><Link to="/seller">Home</Link></li>
+      <li><Link to="/seller/chat">Chat</Link></li>
+      <li><Link to="/seller/produk">Produk</Link></li>
+      <li><Link to="/seller/pesanan">Pesanan</Link></li>
     </ul>
   </div>
-</div>
+</div> -->

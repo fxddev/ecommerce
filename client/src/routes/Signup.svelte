@@ -2,29 +2,34 @@
   import axios from "axios";
   import { navigate } from "svelte-navigator";
 
+  let role_selected = "";
+  const get_current_url = window.location.href;
+  console.log(get_current_url);
+
+  //   https://www.geeksforgeeks.org/how-to-get-url-parameters-using-javascript/
+  let paramString = get_current_url.split("?")[1];
+  console.log("paramString");
+  console.log(paramString);
+  let queryString = new URLSearchParams(paramString);
+  console.log("queryString");
+  console.log(queryString);
+  for (let pair of queryString.entries()) {
+    // console.log("Key is:" + pair[0]);
+    role_selected = pair[0];
+    console.log("role_selected");
+    console.log(role_selected);
+  }
+
   const get_cred = localStorage.getItem("cred");
   //   console.log(get_cred);
   if (get_cred !== null) {
     navigate(`/`, { replace: true });
   }
 
-  let role_selected = "";
-
   async function handleRole(role) {
     role_selected = role;
     navigate(`/signup?${role}`, { replace: true });
   }
-
-  //   const get_current_url = window.location.href;
-  //   //   console.log(get_current_url);
-
-  //   //   https://www.geeksforgeeks.org/how-to-get-url-parameters-using-javascript/
-  //   let paramString = get_current_url.split("?")[1];
-  //   let queryString = new URLSearchParams(paramString);
-  //   for (let pair of queryString.entries()) {
-  //     // console.log("Key is:" + pair[0]);
-  //     role_selected = pair[0];
-  //   }
 
   let nama, email, password;
 
@@ -42,6 +47,8 @@
       password: password,
       alamat: "",
       role_id: role_id,
+      created_at: "",
+      update_at: "",
     };
 
     var data = JSON.stringify(payload);
@@ -60,7 +67,7 @@
       const data = await resp.data;
       console.log(data);
 
-      navigate(`/login`, { replace: true });
+      navigate(`/login?${role_selected}`, { replace: true });
     } catch (error) {
       console.error(`Axios error..: ${error}`);
     }

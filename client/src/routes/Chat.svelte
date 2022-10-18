@@ -16,8 +16,10 @@
   console.log(role_id);
 </script>
 
-<div class="container__home">
+<p>chat belum tersedia</p>
+
+<!-- <div class="container__home">
   {#if role_id === 2}
     <DrawerPenjual>chat belum tersedia</DrawerPenjual>
   {:else}{/if}
-</div>
+</div> -->
