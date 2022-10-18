@@ -3,112 +3,13 @@
 
 const conn = require('../connect')
 
-const jwt = require('jsonwebtoken')
 // const bcrypt = require("bcrypt")
-var simplecrypt = require("simplecrypt");
-var sc = simplecrypt();
+var CryptoJS = require("crypto-js");
+const jwt = require('jsonwebtoken')
 
 const auth_reuse = require("../components/auth_reuse")
 
 const jwt_secret = process.env.JWT_SECRET;
-
-// async function signUpHandle(data, role_name) {
-//     // let passing_data = {}
-
-//     const table_active = role_name
-
-//     const email = data.email;
-
-//     // return {
-//     //     message: `SELECT * FROM ${table_active} WHERE email = "${email}"`
-//     // }
-
-//     try {
-//         conn.query(`SELECT * FROM ${table_active} WHERE email = "${email}"`, async function (error, rows, fields) {
-
-//             // return {
-//             //     message: "tes"
-//             // }
-
-//             if (error) {
-//                 connection.log(error)
-
-//                 // passing_data = {
-//                 //     message: "Error",
-//                 //     data: error
-//                 // }
-
-//                 return {
-//                     message: "Error",
-//                     data: error
-//                 }
-
-//             } else {
-
-//                 // console.log(rows);
-//                 // return {
-//                 //     message: rows.length
-//                 // }
-
-//                 if (rows.length !== 0) {
-//                     console.log("User sudah terdaftar");
-
-//                     // passing_data = {
-//                     //     message: "User sudah terdaftar"
-//                     // }
-
-//                     return {
-//                         message: "User sudah terdaftar"
-//                     }
-//                 } else {
-//                     const nama = data.nama;
-//                     const password = data.password;
-//                     const alamat = data.alamat;
-//                     const role_id = data.role_id;
-//                     const created_at = data.created_at;
-//                     const update_at = data.update_at;
-
-//                     const hash = await bcrypt.hash(password, 10);
-
-//                     await conn.query(`INSERT INTO ${table_active} (nama, email, password, alamat, role_id, created_at, update_at) VALUES(${nama}, ${email}, ${hash}, ${alamat}, ${role_id}, ${created_at}, ${update_at})`, async function (error, rows, fields) {
-//                         if (error) {
-//                             console.log(error)
-
-//                             // passing_data = {
-//                             //     message: "Ada Error",
-//                             //     data: error
-//                             // }
-
-//                             return {
-//                                 message: "Ada Error",
-//                                 data: error
-//                             }
-//                         } else {
-//                             // passing_data = {
-//                             //     message: "Berhasil sign up !"
-//                             // }
-
-//                             return {
-//                                 message: "Berhasil sign up !"
-//                             }
-//                         }
-//                     })
-//                 }
-
-//             }
-//         })
-
-//         // return passing_data
-//     } catch (error) {
-//         console.error(`Ada Error saat menjalankan update keranjang: ${error}`);
-
-//         passing_data = {
-//             message: `Ada Error saat menjalankan update keranjang: ${error}`
-//         }
-//         return passing_data
-//     }
-
-// }
 
 exports.signUp = async (req, res) => {
 
@@ -177,14 +78,12 @@ exports.signUp = async (req, res) => {
                     const update_at = d.getTime();
 
                     // const hash = await bcrypt.hash(password, 10);
-                    var hash = sc.encrypt(password);
-                    // console.log("hash");
-                    // console.log(hash);
-                    var decode = sc.decrypt(hash);
-                    // console.log("decode");
-                    // console.log(decode);
+                    
+                    // Encrypt
+                    var ciphertext = CryptoJS.AES.encrypt(password, pass_key).toString();
+                    console.log(ciphertext);
 
-                    await conn.query(`INSERT INTO ${table_active} (nama, email, password, alamat, role_id, created_at, update_at) VALUES("${nama}", "${email}", "${hash}", "${alamat}", ${role_id}, "${created_at}", "${update_at}")`, function (error, rows, fields) {
+                    await conn.query(`INSERT INTO ${table_active} (nama, email, password, alamat, role_id, created_at, update_at) VALUES("${nama}", "${email}", "${ciphertext}", "${alamat}", ${role_id}, "${created_at}", "${update_at}")`, function (error, rows, fields) {
                         if (error) {
                             console.log(error)
 
@@ -260,14 +159,11 @@ exports.login = async (req, res) => {
                     let password = req.body.password;
                     // const result = await bcrypt.compare(password, rows[0].password);
 
-                    let p = rows[0].password
-                    var decode = sc.decrypt(p.toString());
-                    console.log("pass decrypt");
-                    console.log(decode);
-                    // console.log("pass db");
-                    console.log(rows[0].password);
+                    var bytes = CryptoJS.AES.decrypt(rows[0].password, pass_key);
+                    var originalText = bytes.toString(CryptoJS.enc.Utf8);
+                    // console.log(originalText);
 
-                    if (password === decode) {
+                    if (password === originalText) {
 
                         const payload = {
                             email: email
