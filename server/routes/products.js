@@ -4,6 +4,8 @@ const controller = require('../controllers/products');
 const router = express.Router();
 
 router.get("/products", controller.products);
+router.post("/product", controller.product);
+router.post("/product/tambah", controller.tambah);
 // router.post("/midtrans/status", controller.status);
 // router.post("/midtrans/statusb2b", controller.statusb2b);
 // router.post("/midtrans/notifikasi", controller.notifikasi);
