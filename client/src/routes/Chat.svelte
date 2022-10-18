@@ -7,13 +7,15 @@
 
   const get_cred = localStorage.getItem("cred");
   //   console.log(get_cred);
-  if (get_cred === null) {
-    navigate(`/login`, { replace: true });
-  }
 
-  const cred = JSON.parse(get_cred);
-  const role_id = cred.role_id;
-  console.log(role_id);
+  // let cred = [];
+  // if (get_cred === null) {
+  //   navigate(`/login`, { replace: true });
+  // } else {
+  //   cred = JSON.parse(get_cred);
+  //   const role_id = cred.role_id;
+  //   console.log(role_id);
+  // }
 </script>
 
 <p>chat belum tersedia</p>

@@ -30,13 +30,30 @@
   <Route path="login" component={Login} />
   <Route path="signup" component={Signup} />
 
-  <DrawerPenjual>
-    <Route path="seller" component={HomePenjual} />
-    <Route path="seller/chat" component={Chat} />
-    <Route path="seller/produk" component={Produk} />
-    <Route path="seller/produk/tambah" component={TambahProduct} />
-    <Route path="seller/pesanan" component={Pesanan} />
-  </DrawerPenjual>
+  <Route path="seller">
+    <DrawerPenjual>
+      <HomePenjual />
+    </DrawerPenjual>
+  </Route>
+  <Route path="seller/chat">
+    <DrawerPenjual>
+      <Chat />
+    </DrawerPenjual>
+  </Route>
+  <Route path="seller/produk">
+    <DrawerPenjual>
+      <Produk />
+    </DrawerPenjual>
+  </Route>
+  <Route path="seller/produk/tambah">
+    <DrawerPenjual>
+      <TambahProduct />
+    </DrawerPenjual>
+  </Route><Route path="seller/pesanan">
+    <DrawerPenjual>
+      <Pesanan />
+    </DrawerPenjual>
+  </Route>
 
   {#if get_cred === null || cred.data.role_id === 3}
     <Route path="/*">
