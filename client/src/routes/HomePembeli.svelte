@@ -6,6 +6,8 @@
 
   import ProductDetails from "./ProductDetails.svelte";
 
+  const api_url = localStorage.getItem("api_url");
+
   const get_cred = localStorage.getItem("cred");
 
   let products = [];
@@ -14,7 +16,7 @@
 
     var config = {
       method: "get",
-      url: "http://localhost:8003/products",
+      url: `${api_url}/products`, 
     };
 
     try {
