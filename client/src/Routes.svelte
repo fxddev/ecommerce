@@ -49,18 +49,19 @@
     <DrawerPenjual>
       <TambahProduct />
     </DrawerPenjual>
-  </Route><Route path="seller/pesanan">
+  </Route>
+  <Route path="seller/pesanan">
     <DrawerPenjual>
       <Pesanan />
     </DrawerPenjual>
   </Route>
 
-  {#if get_cred === null || cred.data.role_id === 3}
+  <!-- {#if get_cred === null || cred.data.role_id === 3} -->
     <Route path="/*">
       <Route path="/">
         <HomePembeli />
       </Route>
       <Route path=":id" component={ProductDetails} />
     </Route>
-  {/if}
+  <!-- {/if} -->
 </Router>
