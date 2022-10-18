@@ -2,6 +2,8 @@
   import axios from "axios";
   import { navigate } from "svelte-navigator";
 
+  const api_url = localStorage.getItem("api_url");
+
   let role_selected = "";
   const get_current_url = window.location.href;
   console.log(get_current_url);
@@ -55,7 +57,7 @@
 
     var config = {
       method: "post",
-      url: "http://localhost:8003/auth/signup",
+      url: `${api_url}/auth/signup`, 
       headers: {
         "Content-Type": "application/json",
       },

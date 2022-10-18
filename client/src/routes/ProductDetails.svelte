@@ -6,6 +6,8 @@
 
   export let id;
 
+  const api_url = localStorage.getItem("api_url");
+
   let product_details = {};
   productData.subscribe((value) => {
     console.log(value);
@@ -30,7 +32,7 @@
 
       var config = {
         method: "post",
-        url: "http://localhost:8003/keranjang/tambah",
+        url: `${api_url}/keranjang/tambah`, 
         headers: {
           "Content-Type": "application/json",
         },

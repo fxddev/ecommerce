@@ -4,6 +4,8 @@
 
   //   import { Drawer } from "../store/MyWritableStore";
 
+  const api_url = localStorage.getItem("api_url");
+
   let role_selected = "";
   const get_current_url = window.location.href;
   console.log(get_current_url);
@@ -45,7 +47,7 @@
 
     var config = {
       method: "post",
-      url: "http://localhost:8003/auth/login",
+      url: `${api_url}/auth/login`,
       headers: {
         "Content-Type": "application/json",
       },

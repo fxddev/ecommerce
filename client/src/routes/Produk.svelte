@@ -2,6 +2,8 @@
     import axios from "axios";
     import { navigate } from "svelte-navigator";
 
+    const api_url = localStorage.getItem("api_url");
+
     const get_cred = localStorage.getItem("cred");
     console.log(get_cred);
 
@@ -18,7 +20,7 @@
 
         var config = {
             method: "post",
-            url: "http://localhost:8003/product",
+            url: `${api_url}/product`, 
             headers: {
                 "Content-Type": "application/json",
             },
