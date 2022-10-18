@@ -66,7 +66,11 @@
 
       localStorage.setItem("cred", JSON.stringify(array));
 
-      navigate(`/`, { replace: true });
+      if (parseInt(role_id) === 2) {
+        navigate(`/seller`, { replace: true });
+      } else if (parseInt(role_id) === 3) {
+        navigate(`/`, { replace: true });
+      }
     } catch (error) {
       console.error(`Axios error..: ${error}`);
     }
