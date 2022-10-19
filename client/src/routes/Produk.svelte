@@ -112,7 +112,7 @@
                         </td>
                         <td>{p.stok}</td>
                         <td>
-                            {#if p.status === "active"}
+                            {#if p.status === "true"}
                                 <input type="checkbox" class="toggle" checked />
                             {:else}
                                 <input type="checkbox" class="toggle" />

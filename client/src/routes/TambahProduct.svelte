@@ -1,5 +1,8 @@
 <script>
+    import axios from "axios";
     import { navigate } from "svelte-navigator";
+
+    const api_url = localStorage.getItem("api_url");
 
     const get_cred = localStorage.getItem("cred");
     //   console.log(get_cred);
@@ -30,19 +33,65 @@
         };
     }
 
+    let nama, harga, deskripsi, kondisi = "Baru", min_pem, status = true, stock, berat;
     async function addProduct() {
-        console.log("avatar");
-        console.log(avatar);
-        console.log("fileinput");
-        console.log(fileinput);
+        // console.log("avatar");
+        // console.log(avatar);
+        // console.log("fileinput");
+        // console.log(fileinput);
 
         // var file = document.getElementById("imgProduct");
         // console.log(file.files[0]);
+
+        // console.log("kondisi");
+        // console.log(kondisi);
+        // console.log("status");
+        // console.log(status);
+
+        const data = cred.data;
+        const id = data.id;
+        var payload = JSON.stringify({
+            nama: nama,
+            img: "https://pma-mysql-addon-clevercloud-customers.services.clever-cloud.com/sql",
+            harga: harga.toString(),
+            deskripsi: deskripsi,
+            kondisi: kondisi.toString(),
+            minimum_pembelian: parseInt(min_pem),
+            status: status.toString(),
+            stok: stock.toString(),
+            berat: berat.toString(),
+            id_penjual: parseInt(id),
+        });
+        // console.log(payload);
+
+        var config = {
+            method: "post",
+            url: `${api_url}/product/tambah`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: payload,
+        };
+
+        try {
+            const resp = await axios(config);
+            const data = await resp.data;
+            console.log(data);
+
+            navigate(`/seller/produk`, { replace: true });
+        } catch (error) {
+            console.error(`Axios error..: ${error}`);
+        }
     }
 </script>
 
-<div>
-    <input type="text" placeholder="Nama here" class="input w-full max-w-xs" />
+<div class="container__">
+    <input
+        type="text"
+        placeholder="Nama here"
+        class="input w-full max-w-xs"
+        bind:value={nama}
+    />
 
     <div id="app">
         <h1>Upload Image</h1>
@@ -86,20 +135,51 @@
         type="number"
         placeholder="Harga here"
         class="input w-full max-w-xs"
+        bind:value={harga}
     />
-    <input type="text" placeholder="Desc here" class="input w-full max-w-xs" />
+    <input
+        type="text"
+        placeholder="Desc here"
+        class="input w-full max-w-xs"
+        bind:value={deskripsi}
+    />
+    <!-- https://svelte.dev/tutorial/group-inputs -->
     <div>
-        <input type="radio" name="radio-1" class="radio" checked />
-        <input type="radio" name="radio-1" class="radio" />
+        Baru<input
+            type="radio"
+            name="radio-1"
+            class="radio"
+            bind:group={kondisi}
+            value="Baru"
+            checked
+        />
+        Bekas<input
+            type="radio"
+            name="radio-1"
+            class="radio"
+            bind:group={kondisi}
+            value="Bekas"
+        />
     </div>
     <input
         type="number"
         placeholder="minimum_pembelian here"
         class="input w-full max-w-xs"
+        bind:value={min_pem}
     />
-    Status <input type="checkbox" class="toggle" checked />
-    <input type="text" placeholder="stok here" class="input w-full max-w-xs" />
-    <input type="text" placeholder="berat here" class="input w-full max-w-xs" />
+    Status <input type="checkbox" class="toggle" bind:checked={status} />
+    <input
+        type="text"
+        placeholder="stok here"
+        class="input w-full max-w-xs"
+        bind:value={stock}
+    />
+    <input
+        type="text"
+        placeholder="berat here"
+        class="input w-full max-w-xs"
+        bind:value={berat}
+    />
 
     <button class="btn" on:click={() => addProduct()}>Tambah</button>
 </div>
@@ -122,5 +202,10 @@
         display: flex;
         height: 200px;
         width: 200px;
+    }
+
+    .container__ {
+        display: flex;
+        flex-direction: column;
     }
 </style>
