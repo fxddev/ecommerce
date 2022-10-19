@@ -14,30 +14,40 @@
     product_details = value;
   });
 
-  function buyHanlde() {
+  async function buyHandle() {
     const get_cred = localStorage.getItem("cred");
     console.log(get_cred);
+    const cred = JSON.parse(get_cred);
+    const data = cred.data;
+    const id_pembeli = data.id;
+    console.log("id_pembeli");
+    console.log(id_pembeli);
 
     if (get_cred === null) {
       navigate(`/login?customer`, { replace: true });
     } else {
-      const payload = {
-        id_product: 2,
-        id_pembeli: 1,
+      const obj = {
+        id_product: parseInt(product_details.id),
+        id_pembeli: parseInt(id_pembeli),
         jumlah: "1",
-        created_at: "2416513757",
-        update_at: "2416513757",
       };
-      var data = JSON.stringify(payload);
+      var payload = JSON.stringify(obj);
 
       var config = {
         method: "post",
-        url: `${api_url}/keranjang/tambah`, 
+        url: `${api_url}/keranjang/tambah`,
         headers: {
           "Content-Type": "application/json",
         },
-        data: data,
+        data: payload,
       };
+      try {
+        const resp = await axios(config);
+        const data = await resp.data;
+        console.log(data);
+      } catch (error) {
+        console.error(`Axios error..: ${error}`);
+      }
     }
   }
 </script>
@@ -48,5 +58,5 @@
   Rp.{product_details.harga}
   {product_details.deskripsi}
 
-  <button class="btn" on:click={() => buyHanlde()}>buy</button>
+  <button class="btn" on:click={() => buyHandle()}>buy</button>
 </div>
