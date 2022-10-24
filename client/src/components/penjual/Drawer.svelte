@@ -11,6 +11,11 @@
   // Drawer.subscribe((getValue) => {
   //   console.log("trigger reload " + getValue);
   // });
+
+  function handleLogOut() {
+    localStorage.removeItem("cred");
+    location.reload();
+  }
 </script>
 
 <div class="drawer drawer-mobile">
@@ -32,6 +37,7 @@
       <li><Link to="/seller/chat">Chat</Link></li>
       <li><Link to="/seller/produk">Produk</Link></li>
       <li><Link to="/seller/pesanan">Pesanan</Link></li>
+      <li><a href="#" on:click={() => handleLogOut()}>Logout</a></li> 
     </ul>
   </div>
 </div>

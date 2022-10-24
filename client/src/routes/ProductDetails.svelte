@@ -46,6 +46,8 @@
         const resp = await axios(config);
         const data = await resp.data;
         console.log(data);
+
+        navigate(`/keranjang`, { replace: true });
       } catch (error) {
         console.error(`Axios error..: ${error}`);
       }

@@ -45,6 +45,10 @@
         }
     }
     getCarts();
+
+    async function cartSelected(cart) {
+        console.log(cart);
+    }
 </script>
 
 <Navbar />
@@ -53,7 +57,7 @@
     {#each carts as c}
         <div class="content__">
             <div class="side__left">
-                <input type="checkbox" checked="checked" class="checkbox" />
+                <input type="checkbox" checked="checked" class="checkbox"  on:click={() => cartSelected(c)} />
             </div>
             <div class="side__right">
                 <div class="card card-side bg-base-100 shadow-xl">
