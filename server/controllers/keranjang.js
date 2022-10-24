@@ -5,10 +5,9 @@ const jwt = require('jsonwebtoken')
 exports.keranjang = async (req, res) => {
 
     const id_pembeli = req.body.id_pembeli;
-
+    
     conn.query(`SELECT
     keranjang.id AS id_keranjang,
-    pembeli.id AS id_pembeli,
     penjual.nama AS nama_penjual,
     penjual.alamat AS alamat_penjual,
     products.nama AS nama_product,
@@ -19,12 +18,12 @@ exports.keranjang = async (req, res) => {
     products.stok,
     products.status
   FROM keranjang
-    INNER JOIN pembeli
-      ON keranjang.id_pembeli = ${id_pembeli}
     INNER JOIN products
       ON keranjang.id_product = products.id
     INNER JOIN penjual
-      ON products.id_penjual = penjual.id`, async function (error, rows, fields) {
+      ON products.id_penjual = penjual.id
+    WHERE
+      keranjang.id_pembeli = ${id_pembeli}`, async function (error, rows, fields) {
 
         if (error) {
             connection.log(error)
