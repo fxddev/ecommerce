@@ -22,6 +22,9 @@ app.use(landing_page);
 const auth = require("./routes/auth");
 app.use(auth);
 
+const users = require("./routes/users");
+app.use(users);
+
 const products = require("./routes/products");
 app.use(products);
 
