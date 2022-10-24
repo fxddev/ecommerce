@@ -6,6 +6,10 @@
   function handleKeranjang() {
     navigate(`/keranjang`, { replace: true });
   }
+  
+  function handleProfile() {
+    navigate(`/profile`, { replace: true });
+  }
 
   function handleLogin() {
     navigate(`/login`, { replace: true });
@@ -75,7 +79,7 @@
           <li><a on:click={() => handleSignup()}>Signup</a></li>
         {:else}
           <li>
-            <a class="justify-between">
+            <a class="justify-between" on:click={() => handleProfile()}>
               Profile
               <span class="badge">New</span>
             </a>
