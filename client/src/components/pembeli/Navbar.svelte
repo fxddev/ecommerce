@@ -6,10 +6,6 @@
   function handleKeranjang() {
     navigate(`/keranjang`, { replace: true });
   }
-  
-  function handleProfile() {
-    navigate(`/profile`, { replace: true });
-  }
 
   function handleLogin() {
     navigate(`/login`, { replace: true });
@@ -21,6 +17,10 @@
   function handleLogOut() {
     localStorage.removeItem("cred");
     location.reload();
+  }
+  
+  function handleProfile() {
+    navigate(`/profile`, { replace: true });
   }
 </script>
 

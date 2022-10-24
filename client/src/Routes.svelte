@@ -59,13 +59,14 @@
   </Route>
 
   <!-- {#if get_cred === null || cred.data.role_id === 3} -->
-    <Route path="/*">
-      <Route path="/">
-        <HomePembeli />
-      </Route>
-      <Route path=":id" component={ProductDetails} />
+  <Route path="/*">
+    <Route path="/">
+      <HomePembeli />
     </Route>
-    <Route path="keranjang" component={Keranjang} />
-    <Route path="profile" component={Profile} />
+    <Route path=":id" component={ProductDetails} />
+  </Route>
+  <Route path="keranjang" component={Keranjang} />
   <!-- {/if} -->
+
+  <Route path="profile" component={Profile} />
 </Router>
