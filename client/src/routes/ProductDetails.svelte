@@ -17,15 +17,16 @@
   async function buyHandle() {
     const get_cred = localStorage.getItem("cred");
     console.log(get_cred);
-    const cred = JSON.parse(get_cred);
-    const data = cred.data;
-    const id_pembeli = data.id;
-    console.log("id_pembeli");
-    console.log(id_pembeli);
 
     if (get_cred === null) {
       navigate(`/login?customer`, { replace: true });
     } else {
+      const cred = JSON.parse(get_cred);
+      const data = cred.data;
+      const id_pembeli = data.id;
+      console.log("id_pembeli");
+      console.log(id_pembeli);
+
       const obj = {
         id_product: parseInt(product_details.id),
         id_pembeli: parseInt(id_pembeli),
