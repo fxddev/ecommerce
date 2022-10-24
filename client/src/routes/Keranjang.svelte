@@ -61,9 +61,12 @@
     // }
     // $: console.log(selection);
 
-    let total_harga = 0
+    let array_harga = []
+    let total_harga = 0;
     $: {
         // console.log(selection);
+        array_harga = []
+
         for (let i = 0; i < selection.length; i++) {
             console.log("selection[i]");
             console.log(selection[i]);
@@ -74,18 +77,29 @@
                         parseInt(carts[y].id_keranjang) ===
                         parseInt(selection[i])
                     ) {
-                        if (selection.length === 1) {
-                            total_harga = parseInt(carts[y].harga)}
-                        } else if (selection.length > 1) {
-                        const tambah = total_harga + parseInt(carts[y].harga)
+                        // if (selection.length === 1) {
+                        //     total_harga = parseInt(carts[y].harga);
+                        // } else if (selection.length > 1) {
+                        //     const tambah =
+                        //         total_harga + parseInt(carts[y].harga);
+                        // }
+                        
+                        array_harga.push(parseInt(carts[y].harga))
                     }
-                        // console.log("carts[y");
-                        // console.log(carts[y]);
-                    }
+                    // console.log("carts[y");
+                    // console.log(carts[y]);
                 }
             }
-
         }
+
+        console.log(array_harga);
+        const total_harga = array_harga.reduce((accumulator, value) => {
+            return accumulator + value;
+        }, 0);
+
+
+        console.log("total_harga");
+        console.log(total_harga);
     }
 </script>
 
