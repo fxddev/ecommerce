@@ -46,54 +46,32 @@
     }
     getCarts();
 
-    let selection = [];
-    // async function cartSelected() {
-    //     // console.log(cart);
-    //     // on:click={() => cartSelected()}
-
-    //     // console.log(selection);
-
-    //     for (let index = 0; index < selection.length; index++) {
-    //         console.log("selection[index]");
-    //         console.log(selection[index]);
-
-    //     }
-    // }
-    // $: console.log(selection);
+    let cart_selected = [];
 
     let array_harga = []
     let total_harga = 0;
     $: {
-        // console.log(selection);
+        // console.log(cart_selected);
         array_harga = []
 
-        for (let i = 0; i < selection.length; i++) {
-            console.log("selection[i]");
-            console.log(selection[i]);
+        for (let i = 0; i < cart_selected.length; i++) {
+            console.log("cart_selected[i]");
+            console.log(cart_selected[i]);
 
             if (carts.length !== 0) {
                 for (let y = 0; y < carts.length; y++) {
                     if (
                         parseInt(carts[y].id_keranjang) ===
-                        parseInt(selection[i])
-                    ) {
-                        // if (selection.length === 1) {
-                        //     total_harga = parseInt(carts[y].harga);
-                        // } else if (selection.length > 1) {
-                        //     const tambah =
-                        //         total_harga + parseInt(carts[y].harga);
-                        // }
-                        
+                        parseInt(cart_selected[i])
+                    ) {                        
                         array_harga.push(parseInt(carts[y].harga))
                     }
-                    // console.log("carts[y");
-                    // console.log(carts[y]);
                 }
             }
         }
 
         console.log(array_harga);
-        const total_harga = array_harga.reduce((accumulator, value) => {
+        total_harga = array_harga.reduce((accumulator, value) => {
             return accumulator + value;
         }, 0);
 
@@ -112,7 +90,7 @@
                 <input
                     type="checkbox"
                     class="checkbox"
-                    bind:group={selection}
+                    bind:group={cart_selected}
                     value={c.id_keranjang}
                 />
             </div>
@@ -135,6 +113,16 @@
             </div>
         </div>
     {/each}
+</div>
+
+<div>
+    <div>
+        <span>Total Harga:</span>
+        <span>{total_harga}</span>
+    </div>
+    <div>
+        <button class="btn">Beli</button>
+    </div>
 </div>
 
 <style>
