@@ -46,8 +46,46 @@
     }
     getCarts();
 
-    async function cartSelected(cart) {
-        console.log(cart);
+    let selection = [];
+    // async function cartSelected() {
+    //     // console.log(cart);
+    //     // on:click={() => cartSelected()}
+
+    //     // console.log(selection);
+
+    //     for (let index = 0; index < selection.length; index++) {
+    //         console.log("selection[index]");
+    //         console.log(selection[index]);
+
+    //     }
+    // }
+    // $: console.log(selection);
+
+    let total_harga = 0
+    $: {
+        // console.log(selection);
+        for (let i = 0; i < selection.length; i++) {
+            console.log("selection[i]");
+            console.log(selection[i]);
+
+            if (carts.length !== 0) {
+                for (let y = 0; y < carts.length; y++) {
+                    if (
+                        parseInt(carts[y].id_keranjang) ===
+                        parseInt(selection[i])
+                    ) {
+                        if (selection.length === 1) {
+                            total_harga = parseInt(carts[y].harga)}
+                        } else if (selection.length > 1) {
+                        const tambah = total_harga + parseInt(carts[y].harga)
+                    }
+                        // console.log("carts[y");
+                        // console.log(carts[y]);
+                    }
+                }
+            }
+
+        }
     }
 </script>
 
@@ -57,7 +95,12 @@
     {#each carts as c}
         <div class="content__">
             <div class="side__left">
-                <input type="checkbox" checked="checked" class="checkbox"  on:click={() => cartSelected(c)} />
+                <input
+                    type="checkbox"
+                    class="checkbox"
+                    bind:group={selection}
+                    value={c.id_keranjang}
+                />
             </div>
             <div class="side__right">
                 <div class="card card-side bg-base-100 shadow-xl">
