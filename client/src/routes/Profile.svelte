@@ -48,6 +48,11 @@
         }
     }
     getUser();
+
+    let value_update
+    function handleValueUpdate(value) {
+        value_update = value
+    }
 </script>
 
 <Navbar />
@@ -69,7 +74,7 @@
                     <td>Nama</td>
                     <td
                         >{u.nama}
-                        <label for="my-modal" class="btn modal-button"
+                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.nama)}
                             >Ubah</label
                         ></td
                     >
@@ -78,7 +83,7 @@
                     <td>Email</td>
                     <td
                         >{u.email}
-                        <label for="my-modal" class="btn modal-button"
+                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.email)}
                             >Ubah</label
                         ></td
                     >
@@ -87,7 +92,7 @@
                     <td>Alamat</td>
                     <td
                         >{u.alamat}
-                        <label for="my-modal" class="btn modal-button"
+                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.alamat)}
                             >Ubah</label
                         ></td
                     >
@@ -105,7 +110,7 @@
             You've been selected for a chance to get one year of subscription to
             use Wikipedia for free!
         </p> -->
-        <input type="text" placeholder="Type here" class="input w-full max-w-xs" />
+        <input type="text" placeholder="Type here" class="input w-full max-w-xs" value={value_update} />
         <div class="modal-action">
             <label for="my-modal" class="btn">Yay!</label>
         </div>
