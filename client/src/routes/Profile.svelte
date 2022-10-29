@@ -60,11 +60,13 @@
 
         update_selected = status;
         if (status === "alamat") {
+            getProvince()
+
             console.log(value);
-            nama_penerima = value.nama_penerima
-            no_hp = value.nomor_hp
-            origins = value.origins
-            alamat_lengkap = value.alamat_lengkap
+            nama_penerima = value.nama_penerima;
+            no_hp = value.nomor_hp;
+            origins = value.origins;
+            alamat_lengkap = value.alamat_lengkap;
         } else {
             value_update = value;
         }
@@ -148,6 +150,21 @@
             console.log(data);
 
             getUser();
+        } catch (error) {
+            console.error(`Axios error..: ${error}`);
+        }
+    }
+
+    async function getProvince() {
+        var config = {
+            method: "get",
+            url: `${api_url}/rajaongkir/city`,
+        };
+
+        try {
+            const resp = await axios(config);
+            const data = await resp.data;
+            console.log(data);
         } catch (error) {
             console.error(`Axios error..: ${error}`);
         }
@@ -250,6 +267,14 @@
                 class="input w-full max-w-xs"
                 bind:value={origins}
             />
+            <select class="select w-full max-w-xs">
+                <option disabled selected>Pick your favorite Simpson</option>
+                <option>Homer</option>
+                <option>Marge</option>
+                <option>Bart</option>
+                <option>Lisa</option>
+                <option>Maggie</option>
+            </select>
             <span>Alamat Lengkap</span>
             <input
                 type="text"
