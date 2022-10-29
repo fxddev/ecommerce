@@ -57,8 +57,17 @@
     let value_update, update_selected;
     async function handleValueUpdate(value, status) {
         console.log(`mau update ${status}`);
-        value_update = value;
+
         update_selected = status;
+        if (status === "alamat") {
+            console.log(value);
+            nama_penerima = value.nama_penerima
+            no_hp = value.nomor_hp
+            origins = value.origins
+            alamat_lengkap = value.alamat_lengkap
+        } else {
+            value_update = value;
+        }
     }
 
     let nama_penerima, no_hp, origins, alamat_lengkap;
@@ -198,8 +207,10 @@
                             for="my-modal"
                             class="btn modal-button"
                             on:click={() =>
-                                handleValueUpdate(u.alamat, "alamat")}
-                            >Ubah</label
+                                handleValueUpdate(
+                                    alamat_lengkap_tampil,
+                                    "alamat"
+                                )}>Ubah</label
                         ></td
                     >
                 </tr>
