@@ -62,16 +62,31 @@
             const role_id = data.role_id;
             const nama = data.nama
             const email = data.email
+            const alamat = data.alamat
         if (status === "nama") {
             arr = {
                 id: parseInt(id),
                 role_id: parseInt(role_id),
-                nama: value,
-                email: "fahmia@g.c",
-                alamat: [],
+                nama: value_update,
+                email: email,
+                alamat: alamat,
             };
         } else if (status === "email") {
+            arr = {
+                id: parseInt(id),
+                role_id: parseInt(role_id),
+                nama: nama,
+                email: value_update,
+                alamat: alamat,
+            };
         } else if (status === "alamat") {
+            // arr = {
+            //     id: parseInt(id),
+            //     role_id: parseInt(role_id),
+            //     nama: nama,
+            //     email: email,
+            //     alamat: value,
+            // };
         }
 
         var payload = JSON.stringify(arr);
