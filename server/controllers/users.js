@@ -85,17 +85,15 @@ exports.create = async (req, res) => {
     })
 };
 
-exports.create = async (req, res) => {
+exports.update = async (req, res) => {
 
     // {
-    //     "id_product": 1,
-    //     "id_pembeli": 1,
-    //     "ulasan": "Mantap",
-    //     "star": 4,
-    //     "created_at": "26473463",
-    //     "update_at": "26473463"
+    //     "id": 2,
+    //     "role_id": 3,
+    //     "nama": "Fahmi App",
+    //     "email": "fahmia@g.c",
+    //     "alamat": []
     // }
-    const id_product = req.body.id_product;
 
     const role_id = req.body.role_id;
 
@@ -106,21 +104,15 @@ exports.create = async (req, res) => {
         table = "pembeli"
     }
 
-    conn.query(`UPDATE ${table} SET "nama" =
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-     'edit', `created_at` = '1665560538620', `update_at` = '1665560538620' WHERE `pembeli`.`id` = 2 INSERT INTO rating (id_product, id_pembeli, ulasan, star, created_at, update_at) VALUES(${id_product}, ${id_pembeli}, "${ulasan}", ${star}, "${created_at}", "${update_at}")`, async function (error, rows, fields) {
+    const id = req.body.id;
+    const nama = req.body.nama;
+    const email = req.body.email;
+    const alamat = JSON.stringify(req.body.alamat);
+
+    const d = new Date();
+    const update_at = d.getTime();
+
+    conn.query(`UPDATE ${table} SET nama = "${nama}", email = "${email}", alamat = "${alamat}", update_at = "${update_at}" WHERE id = ${id}`, async function (error, rows, fields) {
 
         if (error) {
             res.status(200).send({
@@ -131,7 +123,7 @@ exports.create = async (req, res) => {
         } else {
 
             res.status(200).send({
-                message: "Sukses"
+                message: "Update sukses"
             });
 
         }

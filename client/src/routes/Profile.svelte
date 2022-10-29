@@ -7,11 +7,11 @@
 
     const api_url = localStorage.getItem("api_url");
 
+    const get_cred = localStorage.getItem("cred");
+    console.log(get_cred);
+
     let user_data = [];
     async function getUser() {
-        const get_cred = localStorage.getItem("cred");
-        console.log(get_cred);
-
         if (get_cred === null) {
             navigate(`/login?customer`, { replace: true });
         } else {
@@ -49,17 +49,52 @@
     }
     getUser();
 
-    let value_update
-    function handleValueUpdate(value, status) {
+    let value_update;
+    async function handleValueUpdate(value, status) {
         console.log(`mau update ${status}`);
-        value_update = value
+        value_update = value;
 
+        let arr = {};
+
+        const cred = JSON.parse(get_cred);
+            const data = cred.data;
+            const id = data.id;
+            const role_id = data.role_id;
+            const nama = data.nama
+            const email = data.email
         if (status === "nama") {
-            
+            arr = {
+                id: parseInt(id),
+                role_id: parseInt(role_id),
+                nama: value,
+                email: "fahmia@g.c",
+                alamat: [],
+            };
         } else if (status === "email") {
-            
         } else if (status === "alamat") {
-            
+        }
+
+        var payload = JSON.stringify(arr);
+
+        // var data = JSON.stringify({"id":2,"role_id":3,"nama":"Fahmi App","email":"fahmia@g.c","alamat":[]});
+
+        var config = {
+            method: "put",
+            url: `${api_url}/user/update`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: payload,
+        };
+
+        try {
+            const resp = await axios(config);
+            const data = await resp.data;
+            console.log(data);
+
+            user_data = data.data;
+        } catch (error) {
+            console.error(`Axios error..: ${error}`);
         }
     }
 </script>
@@ -77,13 +112,15 @@
             <button class="btn">Ubah password</button>
         </div>
         <div class="side__right">
-
             <table>
                 <tr>
                     <td>Nama</td>
                     <td
                         >{u.nama}
-                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.nama, "nama")}
+                        <label
+                            for="my-modal"
+                            class="btn modal-button"
+                            on:click={() => handleValueUpdate(u.nama, "nama")}
                             >Ubah</label
                         ></td
                     >
@@ -92,7 +129,10 @@
                     <td>Email</td>
                     <td
                         >{u.email}
-                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.email, "email")}
+                        <label
+                            for="my-modal"
+                            class="btn modal-button"
+                            on:click={() => handleValueUpdate(u.email, "email")}
                             >Ubah</label
                         ></td
                     >
@@ -101,7 +141,11 @@
                     <td>Alamat</td>
                     <td
                         >{u.alamat}
-                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.alamat, "alamat")}
+                        <label
+                            for="my-modal"
+                            class="btn modal-button"
+                            on:click={() =>
+                                handleValueUpdate(u.alamat, "alamat")}
                             >Ubah</label
                         ></td
                     >
@@ -119,7 +163,12 @@
             You've been selected for a chance to get one year of subscription to
             use Wikipedia for free!
         </p> -->
-        <input type="text" placeholder="Type here" class="input w-full max-w-xs" value={value_update} />
+        <input
+            type="text"
+            placeholder="Type here"
+            class="input w-full max-w-xs"
+            value={value_update}
+        />
         <div class="modal-action">
             <label for="my-modal" class="btn">Yay!</label>
         </div>
