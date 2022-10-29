@@ -11,7 +11,7 @@
     console.log(get_cred);
 
     let user_data = [];
-    let alamat_lengkap_tampil = {}
+    let alamat_lengkap_tampil = {};
     async function getUser() {
         if (get_cred === null) {
             navigate(`/login?customer`, { replace: true });
@@ -46,7 +46,7 @@
                 console.log(user_data);
                 // console.log(user_data[0].alamat);
                 // console.log(JSON.parse(user_data[0].alamat));
-                alamat_lengkap_tampil = JSON.parse(user_data[0].alamat)
+                alamat_lengkap_tampil = JSON.parse(user_data[0].alamat);
             } catch (error) {
                 console.error(`Axios error..: ${error}`);
             }
@@ -186,13 +186,14 @@
                 <tr>
                     <td>Alamat</td>
                     <td>
-                        <!-- {#each JSON.parse(u.alamat) as a} -->
-                            {#if alamat_lengkap_tampil.nama_penerima === undefined}
-                                <span />
-                            {:else}
-                                {alamat_lengkap_tampil.nama_penerima}
-                            {/if}
-                        <!-- {/each} -->
+                        {#if alamat_lengkap_tampil.nama_penerima === undefined}
+                            <span />
+                        {:else}
+                            <span>{alamat_lengkap_tampil.nama_penerima}</span>
+                            <span>{alamat_lengkap_tampil.nomor_hp}</span>
+                            <span>{alamat_lengkap_tampil.alamat_lengkap}</span>
+                            <span>{alamat_lengkap_tampil.origins}</span>
+                        {/if}
                         <label
                             for="my-modal"
                             class="btn modal-button"
