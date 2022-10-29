@@ -50,8 +50,17 @@
     getUser();
 
     let value_update
-    function handleValueUpdate(value) {
+    function handleValueUpdate(value, status) {
+        console.log(`mau update ${status}`);
         value_update = value
+
+        if (status === "nama") {
+            
+        } else if (status === "email") {
+            
+        } else if (status === "alamat") {
+            
+        }
     }
 </script>
 
@@ -74,7 +83,7 @@
                     <td>Nama</td>
                     <td
                         >{u.nama}
-                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.nama)}
+                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.nama, "nama")}
                             >Ubah</label
                         ></td
                     >
@@ -83,7 +92,7 @@
                     <td>Email</td>
                     <td
                         >{u.email}
-                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.email)}
+                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.email, "email")}
                             >Ubah</label
                         ></td
                     >
@@ -92,7 +101,7 @@
                     <td>Alamat</td>
                     <td
                         >{u.alamat}
-                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.alamat)}
+                        <label for="my-modal" class="btn modal-button" on:click={() => handleValueUpdate(u.alamat, "alamat")}
                             >Ubah</label
                         ></td
                     >
