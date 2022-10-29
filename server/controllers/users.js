@@ -108,6 +108,7 @@ exports.update = async (req, res) => {
     const nama = req.body.nama;
     const email = req.body.email;
     const alamat = JSON.stringify(req.body.alamat);
+    console.log(alamat);
 
     const d = new Date();
     const update_at = d.getTime();

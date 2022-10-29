@@ -42,6 +42,7 @@
                 console.log(data);
 
                 user_data = data.data;
+                // console.log(JSON.parse(user_data.alamat));
             } catch (error) {
                 console.error(`Axios error..: ${error}`);
             }
@@ -49,47 +50,74 @@
     }
     getUser();
 
-    let value_update;
+    let value_update, update_selected;
     async function handleValueUpdate(value, status) {
         console.log(`mau update ${status}`);
         value_update = value;
+        update_selected = status;
+    }
+
+    let nama_penerima, no_hp, origins, alamat_lengkap
+    async function handleUpdateUser() {
+        const cred = JSON.parse(get_cred);
+        const data = cred.data;
+        const id = data.id;
+        const role_id = data.role_id;
+        const nama = data.nama;
+        const email = data.email;
+        const alamat = data.alamat;
+
+        console.log("update_selected");
+        console.log(update_selected);
+
+        console.log("value_update");
+        console.log(value_update);
 
         let arr = {};
-
-        const cred = JSON.parse(get_cred);
-            const data = cred.data;
-            const id = data.id;
-            const role_id = data.role_id;
-            const nama = data.nama
-            const email = data.email
-            const alamat = data.alamat
-        if (status === "nama") {
+        if (update_selected === "nama") {
             arr = {
                 id: parseInt(id),
                 role_id: parseInt(role_id),
                 nama: value_update,
                 email: email,
-                alamat: alamat,
+                alamat: alamat
             };
-        } else if (status === "email") {
+        } else if (update_selected === "email") {
             arr = {
                 id: parseInt(id),
                 role_id: parseInt(role_id),
                 nama: nama,
                 email: value_update,
-                alamat: alamat,
+                alamat: alamat
             };
-        } else if (status === "alamat") {
+        } else if (update_selected === "alamat") {
+            const arr_alamat = {
+                nama_penerima: nama_penerima,
+                nomor_hp: no_hp,
+                origins: origins,
+                alamat_lengkap: alamat_lengkap
+            }
             // arr = {
             //     id: parseInt(id),
             //     role_id: parseInt(role_id),
             //     nama: nama,
             //     email: email,
-            //     alamat: value,
+            //     alamat: JSON.stringify(arr_alamat)
             // };
+            arr = {
+                id: parseInt(id),
+                role_id: parseInt(role_id),
+                nama: nama,
+                email: email,
+                alamat: arr_alamat
+            };
         }
 
         var payload = JSON.stringify(arr);
+        console.log(payload);
+
+        
+        // {"id":2,"role_id":3,"nama":"Fahmi App","email":"fahmia@g.c","alamat":"[]"}
 
         // var data = JSON.stringify({"id":2,"role_id":3,"nama":"Fahmi App","email":"fahmia@g.c","alamat":[]});
 
@@ -107,7 +135,7 @@
             const data = await resp.data;
             console.log(data);
 
-            user_data = data.data;
+            getUser();
         } catch (error) {
             console.error(`Axios error..: ${error}`);
         }
@@ -154,8 +182,10 @@
                 </tr>
                 <tr>
                     <td>Alamat</td>
-                    <td
-                        >{u.alamat}
+                    <td>
+                        {#if u.alamat.no_hp === undefined}
+                            <span />
+                        {/if}
                         <label
                             for="my-modal"
                             class="btn modal-button"
@@ -178,14 +208,50 @@
             You've been selected for a chance to get one year of subscription to
             use Wikipedia for free!
         </p> -->
-        <input
-            type="text"
-            placeholder="Type here"
-            class="input w-full max-w-xs"
-            value={value_update}
-        />
+
+        {#if update_selected === "alamat"}
+            <span>Nama Penerima</span>
+            <input
+                type="text"
+                placeholder="Type here"
+                class="input w-full max-w-xs"
+                bind:value={nama_penerima}
+            />
+            <span>Nomor HP</span>
+            <input
+                type="number"
+                placeholder="Type here"
+                class="input w-full max-w-xs"
+                bind:value={no_hp}
+            />
+            <span>Kota/Kabupaten</span>
+            <input
+                type="text"
+                placeholder="Type here"
+                class="input w-full max-w-xs"
+                bind:value={origins}
+            />
+            <span>Alamat Lengkap</span>
+            <input
+                type="text"
+                placeholder="Type here"
+                class="input w-full max-w-xs"
+                bind:value={alamat_lengkap}
+            />
+        {:else}
+            <input
+                type="text"
+                placeholder="Type here"
+                class="input w-full max-w-xs"
+                bind:value={value_update}
+            />
+        {/if}
         <div class="modal-action">
-            <label for="my-modal" class="btn">Yay!</label>
+            <label
+                for="my-modal"
+                class="btn"
+                on:click={() => handleUpdateUser()}>Update!</label
+            >
         </div>
     </div>
 </div>
