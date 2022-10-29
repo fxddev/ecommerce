@@ -11,6 +11,7 @@
     console.log(get_cred);
 
     let user_data = [];
+    let alamat_lengkap_tampil = {}
     async function getUser() {
         if (get_cred === null) {
             navigate(`/login?customer`, { replace: true });
@@ -42,7 +43,10 @@
                 console.log(data);
 
                 user_data = data.data;
-                // console.log(JSON.parse(user_data.alamat));
+                console.log(user_data);
+                // console.log(user_data[0].alamat);
+                // console.log(JSON.parse(user_data[0].alamat));
+                alamat_lengkap_tampil = JSON.parse(user_data[0].alamat)
             } catch (error) {
                 console.error(`Axios error..: ${error}`);
             }
@@ -57,7 +61,7 @@
         update_selected = status;
     }
 
-    let nama_penerima, no_hp, origins, alamat_lengkap
+    let nama_penerima, no_hp, origins, alamat_lengkap;
     async function handleUpdateUser() {
         const cred = JSON.parse(get_cred);
         const data = cred.data;
@@ -80,7 +84,7 @@
                 role_id: parseInt(role_id),
                 nama: value_update,
                 email: email,
-                alamat: alamat
+                alamat: alamat,
             };
         } else if (update_selected === "email") {
             arr = {
@@ -88,15 +92,15 @@
                 role_id: parseInt(role_id),
                 nama: nama,
                 email: value_update,
-                alamat: alamat
+                alamat: alamat,
             };
         } else if (update_selected === "alamat") {
             const arr_alamat = {
                 nama_penerima: nama_penerima,
-                nomor_hp: no_hp,
+                nomor_hp: no_hp.toString(),
                 origins: origins,
-                alamat_lengkap: alamat_lengkap
-            }
+                alamat_lengkap: alamat_lengkap,
+            };
             // arr = {
             //     id: parseInt(id),
             //     role_id: parseInt(role_id),
@@ -109,14 +113,13 @@
                 role_id: parseInt(role_id),
                 nama: nama,
                 email: email,
-                alamat: arr_alamat
+                alamat: arr_alamat,
             };
         }
 
         var payload = JSON.stringify(arr);
         console.log(payload);
 
-        
         // {"id":2,"role_id":3,"nama":"Fahmi App","email":"fahmia@g.c","alamat":"[]"}
 
         // var data = JSON.stringify({"id":2,"role_id":3,"nama":"Fahmi App","email":"fahmia@g.c","alamat":[]});
@@ -183,9 +186,13 @@
                 <tr>
                     <td>Alamat</td>
                     <td>
-                        {#if u.alamat.no_hp === undefined}
-                            <span />
-                        {/if}
+                        <!-- {#each JSON.parse(u.alamat) as a} -->
+                            {#if alamat_lengkap_tampil.nama_penerima === undefined}
+                                <span />
+                            {:else}
+                                {alamat_lengkap_tampil.nama_penerima}
+                            {/if}
+                        <!-- {/each} -->
                         <label
                             for="my-modal"
                             class="btn modal-button"

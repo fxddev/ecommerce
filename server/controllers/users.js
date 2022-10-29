@@ -34,7 +34,8 @@ exports.user = async (req, res) => {
             if (rows.length !== 0) {
                 res.status(200).send({
                     message: "Sukses",
-                    data: rows
+                    data: rows,
+                    alamat: JSON.parse(rows[0].alamat)
                 });
             } else {
                 res.status(200).send({
@@ -107,13 +108,14 @@ exports.update = async (req, res) => {
     const id = req.body.id;
     const nama = req.body.nama;
     const email = req.body.email;
-    const alamat = JSON.stringify(req.body.alamat);
-    console.log(alamat);
+    const alamat_string = req.body.alamat;
+    const alamat = JSON.stringify(alamat_string)
+    console.log(alamat)
 
     const d = new Date();
     const update_at = d.getTime();
 
-    conn.query(`UPDATE ${table} SET nama = "${nama}", email = "${email}", alamat = "${alamat}", update_at = "${update_at}" WHERE id = ${id}`, async function (error, rows, fields) {
+    conn.query(`UPDATE ${table} SET nama = "${nama}", email = "${email}", alamat = '${alamat}', update_at = "${update_at}" WHERE id = ${id}`, async function (error, rows, fields) {
 
         if (error) {
             res.status(200).send({
