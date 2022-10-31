@@ -104,7 +104,7 @@ exports.tambahKeranjang = async (req, res) => {
                 const jumlah_calc = parseInt(rows[0].jumlah) + parseInt(jumlah)
                 const jumlah_new = jumlah_calc.toString()
 
-                "UPDATE mahasiswa SET nim=?, nama=?, jurusan=? WHERE id_mahasiswa=?"
+                // "UPDATE mahasiswa SET nim=?, nama=?, jurusan=? WHERE id_mahasiswa=?"
                 // UPDATE `keranjang` SET `jumlah` = '2' WHERE `keranjang`.`id` = 1;
                 conn.query(`UPDATE keranjang 
                 SET 
