@@ -16,8 +16,9 @@
 
   import HomePembeli from "./routes/HomePembeli.svelte";
   import ProductDetails from "./routes/ProductDetails.svelte";
-  import Keranjang from "./routes/Keranjang.svelte";
   import Profile from "./routes/Profile.svelte";
+  import Keranjang from "./routes/Keranjang.svelte";
+  import Checkout from "./routes/Checkout.svelte";
 
   const get_cred = localStorage.getItem("cred");
   console.log(get_cred);
@@ -69,4 +70,5 @@
   <!-- {/if} -->
 
   <Route path="profile" component={Profile} />
+  <Route path="checkout" component={Checkout} />
 </Router>

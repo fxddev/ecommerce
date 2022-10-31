@@ -79,6 +79,10 @@
         console.log("total_harga");
         console.log(total_harga);
     }
+
+    function handleCheckout() {
+        navigate(`/checkout`, { replace: true });
+    }
 </script>
 
 <Navbar />
@@ -121,7 +125,7 @@
         <span>{total_harga}</span>
     </div>
     <div>
-        <button class="btn">Beli</button>
+        <button class="btn" on:click={() => handleCheckout()}>Beli</button>
     </div>
 </div>
 
