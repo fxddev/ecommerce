@@ -155,16 +155,20 @@
         }
     }
 
+    let city = [];
     async function getProvince() {
         var config = {
-            method: "get",
+            method: "post",
             url: `${api_url}/rajaongkir/city`,
         };
 
         try {
             const resp = await axios(config);
             const data = await resp.data;
-            console.log(data);
+            // console.log(data);
+
+            city = data.data.rajaongkir.results;
+            console.log(city);
         } catch (error) {
             console.error(`Axios error..: ${error}`);
         }
@@ -271,7 +275,9 @@
                     />
                 </div>
                 <div>
-                    <button class="btn btn-outline">Bekasi</button>
+                    {#each city.slice(0, 6) as c}
+                        <button class="btn btn-outline">{c.city_name}</button>
+                    {/each}
                 </div>
             </div>
 
