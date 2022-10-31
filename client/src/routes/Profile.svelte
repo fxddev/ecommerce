@@ -65,7 +65,7 @@
             console.log(value);
             nama_penerima = value.nama_penerima;
             no_hp = value.nomor_hp;
-            origins = value.origins;
+            origins = `${value.origins.type} ${value.origins.city_name}`;
             alamat_lengkap = value.alamat_lengkap;
         } else {
             value_update = value;
@@ -106,10 +106,16 @@
                 alamat: alamat,
             };
         } else if (update_selected === "alamat") {
+            let origins_item = {};
+            if (origins_selected.city_id === undefined) {
+                origins_item = alamat_lengkap_tampil.origins;
+            } else {
+                origins_item = origins_selected;
+            }
             const arr_alamat = {
                 nama_penerima: nama_penerima,
                 nomor_hp: no_hp.toString(),
-                origins: origins,
+                origins: origins_item,
                 alamat_lengkap: alamat_lengkap,
             };
             // arr = {
@@ -190,12 +196,12 @@
         console.log(city_search_res);
     }
 
-    let origins_selected = {}
+    let origins_selected = {};
     function handleOriginsUpdate(obj) {
         // console.log(obj);
-        origins = `${obj.type} ${obj.city_name}`
+        origins = `${obj.type} ${obj.city_name}`;
 
-        origins_selected = obj
+        origins_selected = obj;
         console.log("origins_selected");
         console.log(origins_selected);
     }
@@ -220,7 +226,7 @@
                     <td
                         >{u.nama}
                         <label
-                            for="my-modal"
+                            for="my-modal-4"
                             class="btn modal-button"
                             on:click={() => handleValueUpdate(u.nama, "nama")}
                             >Ubah</label
@@ -232,7 +238,7 @@
                     <td
                         >{u.email}
                         <label
-                            for="my-modal"
+                            for="my-modal-4"
                             class="btn modal-button"
                             on:click={() => handleValueUpdate(u.email, "email")}
                             >Ubah</label
@@ -248,10 +254,13 @@
                             <span>{alamat_lengkap_tampil.nama_penerima}</span>
                             <span>{alamat_lengkap_tampil.nomor_hp}</span>
                             <span>{alamat_lengkap_tampil.alamat_lengkap}</span>
-                            <span>{alamat_lengkap_tampil.origins}</span>
+                            <span
+                                >{alamat_lengkap_tampil.origins.type}
+                                {alamat_lengkap_tampil.origins.city_name}</span
+                            >
                         {/if}
                         <label
-                            for="my-modal"
+                            for="my-modal-4"
                             class="btn modal-button"
                             on:click={() =>
                                 handleValueUpdate(
@@ -266,9 +275,9 @@
     {/each}
 </div>
 
-<input type="checkbox" id="my-modal" class="modal-toggle" />
-<div class="modal">
-    <div class="modal-box">
+<input type="checkbox" id="my-modal-4" class="modal-toggle" />
+<label for="my-modal-4" class="modal cursor-pointer">
+    <div class="modal-box relative" for="">
         <!-- <h3 class="font-bold text-lg">Congratulations random Internet user!</h3> -->
         <!-- <p class="py-4">
             You've been selected for a chance to get one year of subscription to
@@ -304,14 +313,18 @@
                 <div>
                     {#if city_search_res.length === 0}
                         {#each city.slice(0, 6) as c}
-                            <button class="btn btn-outline" on:click={() =>
-                                handleOriginsUpdate(c)}>{c.type} {c.city_name}</button
+                            <button
+                                class="btn btn-outline"
+                                on:click={() => handleOriginsUpdate(c)}
+                                >{c.type} {c.city_name}</button
                             >
                         {/each}
                     {:else}
                         {#each city_search_res.slice(0, 6) as c}
-                            <button class="btn btn-outline" on:click={() =>
-                                handleOriginsUpdate(c)}>{c.type} {c.city_name}</button
+                            <button
+                                class="btn btn-outline"
+                                on:click={() => handleOriginsUpdate(c)}
+                                >{c.type} {c.city_name}</button
                             >
                         {/each}
                     {/if}
@@ -341,7 +354,7 @@
             >
         </div>
     </div>
-</div>
+</label>
 
 <style>
     .container__ {
