@@ -7,9 +7,6 @@ exports.create = async (req, res) => {
     // {
     //     "id_product": ,
     //     "id_pembeli": ,
-    //     "midtrans_response": {
-    //         "status": "Pending"
-    //     },
     //     "id_kurir": 1,
     //     "alamat_tujuan": {
     //         "nama": "Fahmi",
@@ -21,9 +18,10 @@ exports.create = async (req, res) => {
     //         "harga_kurir": "6000",
     //         "Total_harga": "16000"
     //     },
-    //     "no_resi": "",
-    //     "created_at": "24165137578475",
-    //     "update_at": "24165137578475"
+    //     "midtrans_response": {
+    //         "status": "Pending"
+    //     },
+    //     "no_resi": ""
     // }
 
     const id_product = req.body.id_product;
@@ -35,10 +33,12 @@ exports.create = async (req, res) => {
     // const detail_harga = req.body.detail_harga;
     const detail_harga = JSON.stringify(req.body.detail_harga);
     const no_resi = req.body.no_resi;
-    const created_at = req.body.created_at;
-    const update_at = req.body.update_at;
+    
+    const d = new Date();
+    const created_at = d.getTime();
+    const update_at = d.getTime();
 
-    conn.query(`INSERT INTO pesanan (id_product, id_pembeli, midtrans_response, id_kurir, alamat_tujuan, detail_harga, no_resi, created_at, update_at) VALUES(${id_product}, ${id_pembeli}, '${midtrans_response}', ${id_kurir}, "${alamat_tujuan}", '${detail_harga}', "${no_resi}", "${created_at}", "${update_at}")`, function (error, rows, fields) {
+    conn.query(`INSERT INTO pesanan (id_product, id_pembeli, id_kurir, alamat_tujuan, detail_harga, midtrans_response, no_resi, created_at, update_at) VALUES(${id_product}, ${id_pembeli}, '${midtrans_response}', ${id_kurir}, "${alamat_tujuan}", '${detail_harga}', "${no_resi}", "${created_at}", "${update_at}")`, function (error, rows, fields) {
         if (error) {
             console.log(error)
 
