@@ -2,6 +2,8 @@
     import axios from "axios";
     import { navigate } from "svelte-navigator";
 
+    import { cartSelected } from "../store/MyWritableStore";
+
     import Navbar from "../components/pembeli/Navbar.svelte";
 
     const api_url = localStorage.getItem("api_url");
@@ -48,11 +50,11 @@
 
     let cart_selected = [];
 
-    let array_harga = []
+    let array_harga = [];
     let total_harga = 0;
     $: {
         // console.log(cart_selected);
-        array_harga = []
+        array_harga = [];
 
         for (let i = 0; i < cart_selected.length; i++) {
             console.log("cart_selected[i]");
@@ -62,9 +64,9 @@
                 for (let y = 0; y < carts.length; y++) {
                     if (
                         parseInt(carts[y].id_keranjang) ===
-                        parseInt(cart_selected[i])
-                    ) {                        
-                        array_harga.push(parseInt(carts[y].harga))
+                        parseInt(cart_selected[i].id_keranjang)
+                    ) {
+                        array_harga.push(parseInt(carts[y].harga));
                     }
                 }
             }
@@ -75,13 +77,15 @@
             return accumulator + value;
         }, 0);
 
-
         console.log("total_harga");
         console.log(total_harga);
+        console.log("cart_selected");
+        console.log(cart_selected);
     }
 
     function handleCheckout() {
         navigate(`/checkout`, { replace: true });
+        cartSelected.update((sendValue) => cart_selected);
     }
 </script>
 
@@ -95,7 +99,7 @@
                     type="checkbox"
                     class="checkbox"
                     bind:group={cart_selected}
-                    value={c.id_keranjang}
+                    value={c}
                 />
             </div>
             <div class="side__right">

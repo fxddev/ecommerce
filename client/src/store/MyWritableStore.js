@@ -31,5 +31,6 @@ function MyWritableStore(value) {
 
 export const drawerStore = MyWritableStore(0);
 export const productData = MyWritableStore(0);
+export const cartSelected = MyWritableStore(0);
 
 // https://svelte.dev/repl/f6f20772142f43568c3cff9c4b4d073b?version=3.29.0

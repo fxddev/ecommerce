@@ -10,6 +10,7 @@ exports.keranjang = async (req, res) => {
     keranjang.id AS id_keranjang,
     penjual.nama AS nama_penjual,
     penjual.alamat AS alamat_penjual,
+    keranjang.id_product,
     products.nama AS nama_product,
     products.img,
     products.harga,
