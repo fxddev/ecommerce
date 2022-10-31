@@ -188,6 +188,16 @@
 
         console.log(city_search_res);
     }
+
+    let origins_selected = {}
+    function handleOriginsUpdate(obj) {
+        // console.log(obj);
+        origins = `${obj.type} ${obj.city_name}`
+
+        origins_selected = obj
+        console.log("origins_selected");
+        console.log(origins_selected);
+    }
 </script>
 
 <Navbar />
@@ -294,19 +304,13 @@
                     {#if city_search_res.length === 0}
                         {#each city.slice(0, 6) as c}
                             <button class="btn btn-outline" on:click={() =>
-                                handleValueUpdate(
-                                    alamat_lengkap_tampil,
-                                    "alamat"
-                                )}>{c.type} {c.city_name}</button
+                                handleOriginsUpdate(c)}>{c.type} {c.city_name}</button
                             >
                         {/each}
                     {:else}
                         {#each city_search_res.slice(0, 6) as c}
                             <button class="btn btn-outline" on:click={() =>
-                                handleValueUpdate(
-                                    alamat_lengkap_tampil,
-                                    "alamat"
-                                )}>{c.type} {c.city_name}</button
+                                handleOriginsUpdate(c)}>{c.type} {c.city_name}</button
                             >
                         {/each}
                     {/if}
