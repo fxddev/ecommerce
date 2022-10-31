@@ -1,7 +1,7 @@
 <script>
   // import outes from "./components/penjual/Drawer.svelte";
 
-  localStorage.setItem("api_url", "https://8003-fxddev-ecommerce-trezl50y12o.ws-us73.gitpod.io");
+  localStorage.setItem("api_url", "https://8003-fxddev-ecommerce-xg1ahiyejom.ws-us73.gitpod.io");
 
   import Routes from "./Routes.svelte";
 </script>
