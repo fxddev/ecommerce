@@ -173,6 +173,21 @@
             console.error(`Axios error..: ${error}`);
         }
     }
+
+    let city_search_res = [];
+    async function handleSearchCity() {
+        // console.log("Sedang seacrh");
+        console.log(`Sedang seacrh ${origins}`);
+
+        city_search_res = city.filter(function (c) {
+            // return c.city_name.toLowerCase() == origins.toLowerCase();
+
+            const city_name = c.city_name.toLowerCase();
+            return city_name.includes(origins.toLowerCase());
+        });
+
+        console.log(city_search_res);
+    }
 </script>
 
 <Navbar />
@@ -272,12 +287,29 @@
                         placeholder="Type here"
                         class="input w-full max-w-xs"
                         bind:value={origins}
+                        on:input={() => handleSearchCity()}
                     />
                 </div>
                 <div>
-                    {#each city.slice(0, 6) as c}
-                        <button class="btn btn-outline">{c.city_name}</button>
-                    {/each}
+                    {#if city_search_res.length === 0}
+                        {#each city.slice(0, 6) as c}
+                            <button class="btn btn-outline" on:click={() =>
+                                handleValueUpdate(
+                                    alamat_lengkap_tampil,
+                                    "alamat"
+                                )}>{c.type} {c.city_name}</button
+                            >
+                        {/each}
+                    {:else}
+                        {#each city_search_res.slice(0, 6) as c}
+                            <button class="btn btn-outline" on:click={() =>
+                                handleValueUpdate(
+                                    alamat_lengkap_tampil,
+                                    "alamat"
+                                )}>{c.type} {c.city_name}</button
+                            >
+                        {/each}
+                    {/if}
                 </div>
             </div>
 
