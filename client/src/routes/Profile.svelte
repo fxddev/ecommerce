@@ -184,6 +184,7 @@
 
             const city_name = c.city_name.toLowerCase();
             return city_name.includes(origins.toLowerCase());
+            // https://svelte.dev/repl/e67e1a90ef3945ec988bf39f6a10b6b3?version=3.32.3
         });
 
         console.log(city_search_res);
