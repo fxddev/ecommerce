@@ -60,7 +60,7 @@
 
         update_selected = status;
         if (status === "alamat") {
-            getProvince()
+            getProvince();
 
             console.log(value);
             nama_penerima = value.nama_penerima;
@@ -260,13 +260,21 @@
                 class="input w-full max-w-xs"
                 bind:value={no_hp}
             />
-            <span>Kota/Kabupaten</span>
-            <input
-                type="text"
-                placeholder="Type here"
-                class="input w-full max-w-xs"
-                bind:value={origins}
-            />
+            <div>
+                <div>
+                    <span>Kota/Kabupaten</span>
+                    <input
+                        type="text"
+                        placeholder="Type here"
+                        class="input w-full max-w-xs"
+                        bind:value={origins}
+                    />
+                </div>
+                <div>
+                    <button class="btn btn-outline">Bekasi</button>
+                </div>
+            </div>
+
             <span>Alamat Lengkap</span>
             <input
                 type="text"
