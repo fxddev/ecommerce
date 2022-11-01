@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 exports.keranjang = async (req, res) => {
 
     const id_pembeli = req.body.id_pembeli;
-    
+
     conn.query(`SELECT
     keranjang.id AS id_keranjang,
     penjual.nama AS nama_penjual,
@@ -142,6 +142,15 @@ exports.updateKeranjang = async (req, res) => {
     //     "update_at": "24165137578475"
     // }
 
+    // is_selected 1 = selected
+    // {
+    //     "id_product": ,
+    //     "id_pembeli": ,
+    //     "is_selected": "0",
+    //     "created_at": "24165137578475",
+    //     "update_at": "24165137578475"
+    // }
+
     const id_product = req.body.id_product;
     const id_pembeli = req.body.id_pembeli;
 
@@ -166,45 +175,68 @@ exports.updateKeranjang = async (req, res) => {
                 //     data: rows
                 // });
 
+                if (req.body.jumlah != undefined) {
+                    const jumlah = req.body.jumlah;
 
-                const jumlah = req.body.jumlah;
+                    let jumlah_calc, jumlah_new
+                    if (parseInt(jumlah) === -1) {
+                        jumlah_calc = parseInt(rows[0].jumlah) - 1
 
-                let jumlah_calc, jumlah_new
-                if (parseInt(jumlah) === -1) {
-                    jumlah_calc = parseInt(rows[0].jumlah) - 1
-
-                    if (parseInt(jumlah_calc) < 1) {
-                        jumlah_new = 1
+                        if (parseInt(jumlah_calc) < 1) {
+                            jumlah_new = 1
+                        } else {
+                            jumlah_new = jumlah_calc.toString()
+                        }
                     } else {
-                        jumlah_new = jumlah_calc.toString()
+                        jumlah_new = jumlah.toString()
                     }
-                } else {
-                    jumlah_new = jumlah.toString()
-                }
 
-                const update_at = req.body.update_at;
+                    const update_at = req.body.update_at;
 
-                // "UPDATE mahasiswa SET nim=?, nama=?, jurusan=? WHERE id_mahasiswa=?"
-                // UPDATE `keranjang` SET `jumlah` = '2' WHERE `keranjang`.`id` = 1;
-                conn.query(`UPDATE keranjang 
+                    // "UPDATE mahasiswa SET nim=?, nama=?, jurusan=? WHERE id_mahasiswa=?"
+                    // UPDATE `keranjang` SET `jumlah` = '2' WHERE `keranjang`.`id` = 1;
+                    conn.query(`UPDATE keranjang 
                 SET 
                 id_product=${rows[0].id_product}, id_pembeli=${rows[0].id_pembeli}, jumlah="${jumlah_new}", created_at="${rows[0].created_at}", update_at="${update_at}" 
                 WHERE 
                 id = ${rows[0].id}`, function (error, rows, fields) {
-                    if (error) {
-                        console.log(error)
+                        if (error) {
+                            console.log(error)
 
-                        res.status(200).send({
-                            message: "Ada Error",
-                            data: error
-                        });
-                    } else {
+                            res.status(200).send({
+                                message: "Ada Error",
+                                data: error
+                            });
+                        } else {
 
-                        res.status(200).send({
-                            message: "Berhasil update keranjang !"
-                        });
-                    }
-                })
+                            res.status(200).send({
+                                message: "Berhasil update jumlah keranjang !"
+                            });
+                        }
+                    })
+                } else {
+                    const is_selected = req.body.is_selected;
+
+                    conn.query(`
+                    UPDATE keranjang 
+                    SET is_selected="${is_selected}", update_at="${update_at}" 
+                    WHERE id = ${rows[0].id}`, function (error, rows, fields) {
+                        if (error) {
+                            console.log(error)
+
+                            res.status(200).send({
+                                message: "Ada Error",
+                                data: error
+                            });
+                        } else {
+
+                            res.status(200).send({
+                                message: "Berhasil update select keranjang !"
+                            });
+                        }
+                    })
+                }
+
             }
         }
     })
