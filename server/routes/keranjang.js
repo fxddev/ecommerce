@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/keranjang", controller.keranjang);
 router.post("/keranjang/tambah", controller.tambahKeranjang);
-router.post("/keranjang/update", controller.updateKeranjang);
+router.put("/keranjang/update", controller.updateKeranjang);
 router.post("/keranjang/deletes", controller.deletesKeranjang);
 // router.post("/midtrans/status", controller.status);
 // router.post("/midtrans/statusb2b", controller.statusb2b);

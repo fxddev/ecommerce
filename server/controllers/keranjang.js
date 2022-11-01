@@ -146,9 +146,7 @@ exports.updateKeranjang = async (req, res) => {
     // {
     //     "id_product": ,
     //     "id_pembeli": ,
-    //     "is_selected": "0",
-    //     "created_at": "24165137578475",
-    //     "update_at": "24165137578475"
+    //     "is_selected": 0
     // }
 
     const id_product = req.body.id_product;
@@ -175,6 +173,10 @@ exports.updateKeranjang = async (req, res) => {
                 //     data: rows
                 // });
 
+                const d = new Date();
+                const update_at = d.getTime();
+
+                let msg = ""
                 if (req.body.jumlah != undefined) {
                     const jumlah = req.body.jumlah;
 
@@ -187,19 +189,21 @@ exports.updateKeranjang = async (req, res) => {
                         } else {
                             jumlah_new = jumlah_calc.toString()
                         }
-                    } else {
+                        msg = "Berhasil update jumlah keranjang !"
+                    } else if (parseInt(jumlah) === 0) {
+                        jumlah_new = rows[0].jumlah
+                        msg = "Gagal update ga bisa 0 !"
+                    }else {
                         jumlah_new = jumlah.toString()
+                        msg = "Berhasil update jumlah keranjang !"
                     }
-
-                    const update_at = req.body.update_at;
 
                     // "UPDATE mahasiswa SET nim=?, nama=?, jurusan=? WHERE id_mahasiswa=?"
                     // UPDATE `keranjang` SET `jumlah` = '2' WHERE `keranjang`.`id` = 1;
-                    conn.query(`UPDATE keranjang 
-                SET 
-                id_product=${rows[0].id_product}, id_pembeli=${rows[0].id_pembeli}, jumlah="${jumlah_new}", created_at="${rows[0].created_at}", update_at="${update_at}" 
-                WHERE 
-                id = ${rows[0].id}`, function (error, rows, fields) {
+                    conn.query(`
+                    UPDATE keranjang 
+                    SET jumlah="${jumlah_new}", update_at="${update_at}" 
+                    WHERE id = ${rows[0].id}`, function (error, rows, fields) {
                         if (error) {
                             console.log(error)
 
@@ -210,7 +214,7 @@ exports.updateKeranjang = async (req, res) => {
                         } else {
 
                             res.status(200).send({
-                                message: "Berhasil update jumlah keranjang !"
+                                message: msg
                             });
                         }
                     })
@@ -219,7 +223,7 @@ exports.updateKeranjang = async (req, res) => {
 
                     conn.query(`
                     UPDATE keranjang 
-                    SET is_selected="${is_selected}", update_at="${update_at}" 
+                    SET is_selected=${is_selected}, update_at="${update_at}" 
                     WHERE id = ${rows[0].id}`, function (error, rows, fields) {
                         if (error) {
                             console.log(error)
