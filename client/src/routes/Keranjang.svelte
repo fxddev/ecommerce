@@ -41,6 +41,12 @@
                 console.log(data);
 
                 carts = data.data;
+
+                for (let index = 0; index < carts.length; index++) {
+                    if (parseInt(carts[index].is_selected) === 1) {
+                        cart_selected.push(carts[index]);
+                    }
+                }
             } catch (error) {
                 console.error(`Axios error..: ${error}`);
             }
@@ -83,6 +89,27 @@
         console.log(cart_selected);
     }
 
+    async function updateCartSelected(c) {
+        console.log("Helllooooo");
+        console.log("c");
+        console.log(c);
+
+        var data = JSON.stringify({
+            id_product: 5,
+            id_pembeli: 2,
+            jumlah: "0",
+        });
+
+        var config = {
+            method: "put",
+            url: "https://8003-fxddev-ecommerce-jp73trz5bhi.ws-us73.gitpod.io/keranjang/update",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: data,
+        };
+    }
+
     function handleCheckout() {
         navigate(`/checkout`, { replace: true });
         cartSelected.update((sendValue) => cart_selected);
@@ -100,6 +127,7 @@
                     class="checkbox"
                     bind:group={cart_selected}
                     value={c}
+                    on:click={() => updateCartSelected(c)}
                 />
             </div>
             <div class="side__right">

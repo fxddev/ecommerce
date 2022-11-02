@@ -17,7 +17,8 @@ exports.keranjang = async (req, res) => {
     products.minimum_pembelian,
     keranjang.jumlah,
     products.stok,
-    products.status
+    products.status,
+    keranjang.is_selected
   FROM keranjang
     INNER JOIN products
       ON keranjang.id_product = products.id
