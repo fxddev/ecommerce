@@ -11,18 +11,19 @@
     const cred = JSON.parse(get_cred);
 
     let carts = [];
-    cartSelected.subscribe((value) => {
-        if (parseInt(value) != 0) {
-            carts = value;
-            console.log("carts");
-            console.log(carts);
-        }
-    });
+    // cartSelected.subscribe((value) => {
+    //     if (parseInt(value) != 0) {
+    //         carts = value;
+    //         console.log("carts");
+    //         console.log(carts);
+    //     }
+    // });
 
     let user_data = [];
     let alamat_lengkap_tampil = {};
-    let origin = "0", destination;
-    async function getAlammat() {
+    let origin = "0",
+        destination = "0";
+    async function getAlamat() {
         if (get_cred === null) {
             navigate(`/login?customer`, { replace: true });
         } else {
@@ -59,14 +60,14 @@
                     alamat_lengkap_tampil = JSON.parse(user_data[0].alamat);
                     console.log(alamat_lengkap_tampil);
 
-                    destination = alamat_lengkap_tampil.origins.city_id
+                    destination = alamat_lengkap_tampil.origins.city_id;
                 }
             } catch (error) {
                 console.error(`Axios error..: ${error}`);
             }
         }
     }
-    getAlammat();
+    getAlamat();
 
     async function getCarts() {
         if (get_cred === null) {
@@ -94,23 +95,46 @@
             try {
                 const resp = await axios(config);
                 const data = await resp.data;
+                console.log("data");
                 console.log(data);
 
-                carts = data.data;
+                const item = data.data;
+                for (let index = 0; index < item.length; index++) {
+                    console.log("item[index].is_selected");
+                    console.log(item[index].is_selected);
+                    if (parseInt(item[index].is_selected) === 1) {
+                        carts.push(item[index]);
+                        console.log("item[index");
+                        console.log(item[index]);
+                    }
+                }
+                console.log("carts");
+                console.log(carts);
+                // carts = data.data;
+
+                return carts;
             } catch (error) {
                 console.error(`Axios error..: ${error}`);
             }
         }
     }
 
-    if (carts.length === 0) {
-        getCarts();
-    }
+    // if (carts.length === 0) {
+    //     console.log('sedang getCarts()');
+    //     getCarts();
+    // }
 
-    
+    // https://svelte.dev/tutorial/await-blocks
+    let promise_get_carts = getCarts();
+
     async function getOngkir() {
         console.log("destination");
         console.log(destination);
+        
+        const alamat_penjual = JSON.parse(carts[0].alamat_penjual)
+        origin = alamat_penjual.origins.city_id
+        console.log("origin");
+        console.log(origin);
 
         // const cred = JSON.parse(get_cred);
         // const data = cred.data;
@@ -142,7 +166,11 @@
         // }
     }
 
-    getOngkir();
+    // getOngkir();
+
+    async function handleKurir() {
+        getOngkir();
+    }
 </script>
 
 <div>
@@ -159,27 +187,39 @@
         {/if}
     </div>
     <div>
-        {#each carts as c}
-            <div class="card card-side bg-base-100 shadow-xl">
-                <figure>
-                    <img src="https://placeimg.com/200/280/arch" alt="Movie" />
-                </figure>
-                <div class="card-body">
-                    <h2 class="card-title">{c.nama_product}</h2>
-                    <p>{c.jumlah} barang</p>
-                    <p>Rp. {c.harga}</p>
-                    <div class="card-actions justify-end">
-                        <select class="select w-full max-w-xs">
-                            <option disabled selected>Pengiriman</option>
-                            <option>Homer</option>
-                            <option>Marge</option>
-                            <option>Bart</option>
-                            <option>Lisa</option>
-                            <option>Maggie</option>
-                        </select>
+        {#await promise_get_carts}
+            <p>...waiting</p>
+        {:then items_carts}
+            {#each items_carts as c}
+                <div class="card card-side bg-base-100 shadow-xl">
+                    <figure>
+                        <img
+                            src="https://placeimg.com/200/280/arch"
+                            alt="Movie"
+                        />
+                    </figure>
+                    <div class="card-body">
+                        <h2 class="card-title">{c.nama_product}</h2>
+                        <p>{c.jumlah} barang</p>
+                        <p>Rp. {c.harga}</p>
+                        <div class="card-actions justify-end">
+                            <select
+                                class="select w-full max-w-xs"
+                                on:click={() => handleKurir()}
+                            >
+                                <option disabled selected>Pengiriman</option>
+                                <option>Homer</option>
+                                <option>Marge</option>
+                                <option>Bart</option>
+                                <option>Lisa</option>
+                                <option>Maggie</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {/each}
+            {/each}
+        {:catch error}
+            <p style="color: red">{error.message}</p>
+        {/await}
     </div>
 </div>
