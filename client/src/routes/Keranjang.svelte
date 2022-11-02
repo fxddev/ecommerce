@@ -8,11 +8,11 @@
 
     const api_url = localStorage.getItem("api_url");
 
+    const get_cred = localStorage.getItem("cred");
+    console.log(get_cred);
+
     let carts = [];
     async function getCarts() {
-        const get_cred = localStorage.getItem("cred");
-        console.log(get_cred);
-
         if (get_cred === null) {
             navigate(`/login?customer`, { replace: true });
         } else {
@@ -89,25 +89,45 @@
         console.log(cart_selected);
     }
 
-    async function updateCartSelected(c) {
-        console.log("Helllooooo");
-        console.log("c");
-        console.log(c);
+    async function updateCartSelected(item) {
+        console.log("item");
+        console.log(item);
+        console.log("end item");
 
-        var data = JSON.stringify({
-            id_product: 5,
-            id_pembeli: 2,
-            jumlah: "0",
+        let new_is_selected = 0;
+        if (parseInt(item.is_selected) === 0) {
+            new_is_selected = 1;
+        } else {
+            new_is_selected = 0;
+        }
+
+        const cred = JSON.parse(get_cred);
+        const data = cred.data;
+        const id_pembeli = data.id;
+        console.log("id_pembeli");
+        console.log(id_pembeli);
+        var payload = JSON.stringify({
+            id_product: item.id_product,
+            id_pembeli: id_pembeli,
+            is_selected: new_is_selected,
         });
 
         var config = {
             method: "put",
-            url: "https://8003-fxddev-ecommerce-jp73trz5bhi.ws-us73.gitpod.io/keranjang/update",
+            url: `${api_url}/keranjang/update`,
             headers: {
                 "Content-Type": "application/json",
             },
-            data: data,
+            data: payload,
         };
+
+        try {
+            const resp = await axios(config);
+            const data = await resp.data;
+            console.log(data);
+        } catch (error) {
+            console.error(`Axios error..: ${error}`);
+        }
     }
 
     function handleCheckout() {
