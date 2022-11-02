@@ -125,7 +125,6 @@
             const resp = await axios(config);
             const data = await resp.data;
             console.log(data);
-            console.log(data);
         } catch (error) {
             console.error(`Axios error..: ${error}`);
         }
