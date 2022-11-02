@@ -21,6 +21,7 @@
 
     let user_data = [];
     let alamat_lengkap_tampil = {};
+    let origin = "0", destination;
     async function getAlammat() {
         if (get_cred === null) {
             navigate(`/login?customer`, { replace: true });
@@ -57,6 +58,8 @@
                 if (user_data[0].alamat != "") {
                     alamat_lengkap_tampil = JSON.parse(user_data[0].alamat);
                     console.log(alamat_lengkap_tampil);
+
+                    destination = alamat_lengkap_tampil.origins.city_id
                 }
             } catch (error) {
                 console.error(`Axios error..: ${error}`);
@@ -104,36 +107,39 @@
         getCarts();
     }
 
-    let origin, destination;
+    
     async function getOngkir() {
-        const cred = JSON.parse(get_cred);
-        const data = cred.data;
-        const id_pembeli = data.id;
-        console.log("id_pembeli");
-        console.log(id_pembeli);
+        console.log("destination");
+        console.log(destination);
 
-        const obj = {
-            id_pembeli: parseInt(id_pembeli),
-        };
-        var payload = JSON.stringify(obj);
+        // const cred = JSON.parse(get_cred);
+        // const data = cred.data;
+        // const id_pembeli = data.id;
+        // console.log("id_pembeli");
+        // console.log(id_pembeli);
 
-        var config = {
-            method: "post",
-            url: `${api_url}/keranjang`,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            data: payload,
-        };
-        try {
-            const resp = await axios(config);
-            const data = await resp.data;
-            console.log(data);
+        // const obj = {
+        //     id_pembeli: parseInt(id_pembeli),
+        // };
+        // var payload = JSON.stringify(obj);
 
-            carts = data.data;
-        } catch (error) {
-            console.error(`Axios error..: ${error}`);
-        }
+        // var config = {
+        //     method: "post",
+        //     url: `${api_url}/keranjang`,
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     },
+        //     data: payload,
+        // };
+        // try {
+        //     const resp = await axios(config);
+        //     const data = await resp.data;
+        //     console.log(data);
+
+        //     // carts = data.data;
+        // } catch (error) {
+        //     console.error(`Axios error..: ${error}`);
+        // }
     }
 
     getOngkir();
