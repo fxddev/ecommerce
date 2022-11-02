@@ -1,7 +1,7 @@
 <script>
     import axios from "axios";
     import { navigate } from "svelte-navigator";
-    import { each } from "svelte/internal";
+    // import { each } from "svelte/internal";
 
     import Navbar from "../components/pembeli/Navbar.svelte";
 
@@ -46,7 +46,9 @@
                 console.log(user_data);
                 // console.log(user_data[0].alamat);
                 // console.log(JSON.parse(user_data[0].alamat));
-                alamat_lengkap_tampil = JSON.parse(user_data[0].alamat);
+                if (user_data[0].alamat != "") {
+                    alamat_lengkap_tampil = JSON.parse(user_data[0].alamat);
+                }
             } catch (error) {
                 console.error(`Axios error..: ${error}`);
             }
