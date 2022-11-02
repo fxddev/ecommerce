@@ -58,6 +58,11 @@
       <Pesanan />
     </DrawerPenjual>
   </Route>
+  <Route path="seller/profile">
+    <DrawerPenjual>
+      <Profile />
+    </DrawerPenjual>
+  </Route>
 
   <!-- {#if get_cred === null || cred.data.role_id === 3} -->
   <Route path="/*">

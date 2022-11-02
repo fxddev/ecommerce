@@ -9,6 +9,7 @@
 
     const get_cred = localStorage.getItem("cred");
     console.log(get_cred);
+    const cred = JSON.parse(get_cred);
 
     let user_data = [];
     let alamat_lengkap_tampil = {};
@@ -16,7 +17,6 @@
         if (get_cred === null) {
             navigate(`/login?customer`, { replace: true });
         } else {
-            const cred = JSON.parse(get_cred);
             const data = cred.data;
             const id = data.id;
             const role_id = data.role_id;
@@ -209,7 +209,10 @@
     }
 </script>
 
-<Navbar />
+{#if cred.data.role_id === 3}
+    <Navbar />
+{/if}
+
 <div class="container__">
     {#each user_data as u}
         <div class="side__left">
@@ -361,6 +364,7 @@
 <style>
     .container__ {
         display: flex;
+        padding-top: 80px;
     }
 
     .container__ .side__left {

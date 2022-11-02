@@ -34,8 +34,7 @@ exports.user = async (req, res) => {
             if (rows.length !== 0) {
                 res.status(200).send({
                     message: "Sukses",
-                    data: rows,
-                    alamat: JSON.parse(rows[0].alamat)
+                    data: rows
                 });
             } else {
                 res.status(200).send({

@@ -91,3 +91,10 @@
     </div>
   </div>
 </div>
+
+<style>
+  .navbar{
+    position: fixed;
+    z-index: 999;
+  }
+</style>
