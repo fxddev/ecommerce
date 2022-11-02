@@ -184,5 +184,6 @@
 <style>
     .container__ .content__ {
         display: flex;
+        padding-top: 80px;
     }
 </style>

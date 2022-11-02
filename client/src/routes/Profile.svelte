@@ -67,7 +67,9 @@
             console.log(value);
             nama_penerima = value.nama_penerima;
             no_hp = value.nomor_hp;
-            origins = `${value.origins.type} ${value.origins.city_name}`;
+            if (value.origins != undefined) {
+                origins = `${value.origins.type} ${value.origins.city_name}`;
+            }
             alamat_lengkap = value.alamat_lengkap;
         } else {
             value_update = value;
@@ -114,12 +116,22 @@
             } else {
                 origins_item = origins_selected;
             }
-            const arr_alamat = {
-                nama_penerima: nama_penerima,
-                nomor_hp: no_hp.toString(),
-                origins: origins_item,
-                alamat_lengkap: alamat_lengkap,
-            };
+
+            let arr_alamat = {};
+            if (cred.data.role_id === 2) {
+                arr_alamat = {
+                    nomor_hp: no_hp.toString(),
+                    origins: origins_item,
+                    alamat_lengkap: alamat_lengkap,
+                };
+            } else if (cred.data.role_id === 3) {
+                arr_alamat = {
+                    nama_penerima: nama_penerima,
+                    nomor_hp: no_hp.toString(),
+                    origins: origins_item,
+                    alamat_lengkap: alamat_lengkap,
+                };
+            }
             // arr = {
             //     id: parseInt(id),
             //     role_id: parseInt(role_id),
@@ -253,10 +265,14 @@
                 <tr>
                     <td>Alamat</td>
                     <td>
-                        {#if alamat_lengkap_tampil.nama_penerima === undefined}
+                        {#if alamat_lengkap_tampil.nomor_hp === undefined}
                             <span />
                         {:else}
-                            <span>{alamat_lengkap_tampil.nama_penerima}</span>
+                            {#if cred.data.role_id === 3}
+                                <span
+                                    >{alamat_lengkap_tampil.nama_penerima}</span
+                                >
+                            {/if}
                             <span>{alamat_lengkap_tampil.nomor_hp}</span>
                             <span>{alamat_lengkap_tampil.alamat_lengkap}</span>
                             <span
@@ -290,13 +306,15 @@
         </p> -->
 
         {#if update_selected === "alamat"}
-            <span>Nama Penerima</span>
-            <input
-                type="text"
-                placeholder="Type here"
-                class="input w-full max-w-xs"
-                bind:value={nama_penerima}
-            />
+            {#if cred.data.role_id === 3}
+                <span>Nama Penerima</span>
+                <input
+                    type="text"
+                    placeholder="Type here"
+                    class="input w-full max-w-xs"
+                    bind:value={nama_penerima}
+                />
+            {/if}
             <span>Nomor HP</span>
             <input
                 type="number"
