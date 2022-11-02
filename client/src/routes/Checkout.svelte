@@ -8,6 +8,7 @@
 
     const get_cred = localStorage.getItem("cred");
     console.log(get_cred);
+    const cred = JSON.parse(get_cred);
 
     let carts = [];
     cartSelected.subscribe((value) => {
@@ -17,6 +18,52 @@
             console.log(carts);
         }
     });
+
+    let user_data = [];
+    let alamat_lengkap_tampil = {};
+    async function getAlammat() {
+        if (get_cred === null) {
+            navigate(`/login?customer`, { replace: true });
+        } else {
+            const data = cred.data;
+            const id = data.id;
+            const role_id = data.role_id;
+            console.log("id");
+            console.log(id);
+
+            var payload = JSON.stringify({
+                id: parseInt(id),
+                role_id: parseInt(role_id),
+            });
+
+            var config = {
+                method: "post",
+                url: `${api_url}/user`,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: payload,
+            };
+
+            try {
+                const resp = await axios(config);
+                const data = await resp.data;
+                console.log(data);
+
+                user_data = data.data;
+                console.log(user_data);
+                // console.log(user_data[0].alamat);
+                // console.log(JSON.parse(user_data[0].alamat));
+                if (user_data[0].alamat != "") {
+                    alamat_lengkap_tampil = JSON.parse(user_data[0].alamat);
+                    console.log(alamat_lengkap_tampil);
+                }
+            } catch (error) {
+                console.error(`Axios error..: ${error}`);
+            }
+        }
+    }
+    getAlammat();
 
     async function getCarts() {
         if (get_cred === null) {
@@ -56,9 +103,55 @@
     if (carts.length === 0) {
         getCarts();
     }
+
+    let origin, destination;
+    async function getOngkir() {
+        const cred = JSON.parse(get_cred);
+        const data = cred.data;
+        const id_pembeli = data.id;
+        console.log("id_pembeli");
+        console.log(id_pembeli);
+
+        const obj = {
+            id_pembeli: parseInt(id_pembeli),
+        };
+        var payload = JSON.stringify(obj);
+
+        var config = {
+            method: "post",
+            url: `${api_url}/keranjang`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: payload,
+        };
+        try {
+            const resp = await axios(config);
+            const data = await resp.data;
+            console.log(data);
+
+            carts = data.data;
+        } catch (error) {
+            console.error(`Axios error..: ${error}`);
+        }
+    }
+
+    getOngkir();
 </script>
 
 <div>
+    <div>
+        <p>Alamat Pengiriman</p>
+        <p>{alamat_lengkap_tampil.nama_penerima}</p>
+        <p>{alamat_lengkap_tampil.nomor_hp}</p>
+        <p>{alamat_lengkap_tampil.alamat_lengkap}</p>
+        {#if alamat_lengkap_tampil.origins != undefined}
+            <p>
+                {alamat_lengkap_tampil.origins.type}
+                {alamat_lengkap_tampil.origins.city_name}
+            </p>
+        {/if}
+    </div>
     <div>
         {#each carts as c}
             <div class="card card-side bg-base-100 shadow-xl">
