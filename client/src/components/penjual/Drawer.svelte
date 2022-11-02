@@ -2,6 +2,7 @@
   import { Link } from "svelte-navigator";
 
   import "../../styles/components/Penjual/Drawer.css";
+  import Navbar from "../pembeli/Navbar.svelte";
 
   // import { Drawer } from "../../store/MyWritableStore";
 
@@ -18,6 +19,8 @@
   }
 </script>
 
+<Navbar />
+
 <div class="drawer drawer-mobile">
   <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content flex flex-col items-center justify-center">
@@ -31,13 +34,15 @@
   </div>
   <div class="drawer-side">
     <label for="my-drawer-2" class="drawer-overlay" />
-    <ul class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
+    <ul
+      class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content menu__left"
+    >
       <!-- Sidebar content here -->
       <li><Link to="/seller">Home</Link></li>
       <li><Link to="/seller/chat">Chat</Link></li>
       <li><Link to="/seller/produk">Produk</Link></li>
       <li><Link to="/seller/pesanan">Pesanan</Link></li>
-      <li><a href="#" on:click={() => handleLogOut()}>Logout</a></li> 
+      <li><a href="#" on:click={() => handleLogOut()}>Logout</a></li>
     </ul>
   </div>
 </div>
@@ -67,3 +72,8 @@
     </ul>
   </div>
 </div> -->
+<style>
+  .menu__left {
+    padding-top: 80px;
+  }
+</style>
