@@ -134,6 +134,47 @@
         const alamat_penjual = JSON.parse(carts[0].alamat_penjual)
         origin = alamat_penjual.origins.city_id
         console.log("origin");
+        console.log(origin);        
+
+        getOngkirJNE()
+
+        // const cred = JSON.parse(get_cred);
+        // const data = cred.data;
+        // const id_pembeli = data.id;
+        // console.log("id_pembeli");
+        // console.log(id_pembeli);
+
+        // const obj = {
+        //     id_pembeli: parseInt(id_pembeli),
+        // };
+        // var payload = JSON.stringify(obj);
+
+        // var config = {
+        //     method: "post",
+        //     url: `${api_url}/keranjang`,
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     },
+        //     data: payload,
+        // };
+        // try {
+        //     const resp = await axios(config);
+        //     const data = await resp.data;
+        //     console.log(data);
+
+        //     // carts = data.data;
+        // } catch (error) {
+        //     console.error(`Axios error..: ${error}`);
+        // }
+    }
+
+    async function getOngkirJNE() {
+        console.log("destination");
+        console.log(destination);
+        
+        const alamat_penjual = JSON.parse(carts[0].alamat_penjual)
+        origin = alamat_penjual.origins.city_id
+        console.log("origin");
         console.log(origin);
 
         // const cred = JSON.parse(get_cred);
@@ -167,8 +208,16 @@
     }
 
     // getOngkir();
+ 
+    let weight
+    async function handleKurir(value) {
 
-    async function handleKurir() {
+        weight = value.berat
+        console.log("weight");
+        console.log(weight);
+        // console.log("value");
+        // console.log(value);
+
         getOngkir();
     }
 </script>
@@ -205,7 +254,7 @@
                         <div class="card-actions justify-end">
                             <select
                                 class="select w-full max-w-xs"
-                                on:click={() => handleKurir()}
+                                on:click={() => handleKurir(c)}
                             >
                                 <option disabled selected>Pengiriman</option>
                                 <option>Homer</option>

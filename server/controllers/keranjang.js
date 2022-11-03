@@ -17,6 +17,7 @@ exports.keranjang = async (req, res) => {
     products.minimum_pembelian,
     keranjang.jumlah,
     products.stok,
+    products.berat,
     products.status,
     keranjang.is_selected
   FROM keranjang
