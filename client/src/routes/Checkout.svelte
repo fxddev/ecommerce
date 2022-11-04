@@ -259,7 +259,7 @@
         console.log(promise_get_ongkir);
         // }
         // console.log("ongkir");
-        // console.log(ongkir);s
+        // console.log(ongkir);
     }
 
     let selected_kurir = [];
@@ -272,10 +272,13 @@
             console.log("harga_barang");
             console.log(harga_barang);
         }
-        const jumlah = parseInt(harga_barang) + parseInt(selected_kurir.value);
-        total_tagihan = jumlah;
-        console.log("total_tagihan");
-        console.log(total_tagihan);
+        if (selected_kurir.value !== undefined) {
+            const jumlah =
+                parseInt(harga_barang) + parseInt(selected_kurir.value);
+            total_tagihan = jumlah;
+            console.log("total_tagihan");
+            console.log(total_tagihan);
+        }
     }
 </script>
 
@@ -359,6 +362,11 @@
                 {selected_kurir.value}
             {/if}
         </p>
-        <p>Total Tagihan : {total_tagihan}</p>
+        <p>
+            Total Tagihan :
+            {#if total_tagihan !== NaN}
+                {total_tagihan}
+            {/if}
+        </p>
     </div>
 </div>
