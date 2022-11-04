@@ -53,33 +53,37 @@ exports.bayar = async (req, res) => {
     //     "payment_type": "bank_transfer",
     //     "transaction_details": {
     //         "gross_amount": 10000,
-    //         "order_id": "1597067145"
+    //         "order_id": "INV/4102022/IDP/3"
     //     },
     //     "customer_details": {
-    //         "email": "budi.utomo@Midtrans.com",
-    //         "first_name": "budi",
-    //         "last_name": "utomo",
-    //         "phone": "+6281 1234 1234"
+    //         "email": "fahmia@g.c",
+    //         "first_name": "Fahmi",
+    //         "last_name": "App",
+    //         "phone": "628515679355"
     //     },
     //     "item_details": [
-    //     {
-    //        "id": "1388998298204",
-    //        "price": 5000,
-    //        "quantity": 1,
-    //        "name": "Ayam Zozozo"
-    //     },
-    //     {
-    //        "id": "1388998298205",
-    //        "price": 5000,
-    //        "quantity": 1,
-    //        "name": "Ayam Xoxoxo"
+    //         {
+    //             "id": "2",
+    //             "price": 5000,
+    //             "quantity": 1,
+    //             "name": "Buku"
+    //         },
+    //         {
+    //             "code": "jne",
+    //             "price": 5000,
+    //             "quantity": 1,
+    //             "name": "YES"
+    //         }
+    //     ],
+    //     "bank_transfer": {
+    //         "bank": "bri",
+    //         "va_number": "111111"
     //     }
-    //    ],
-    //    "bank_transfer":{
-    //      "bank": "bri",
-    //      "va_number": "111111"
-    //   }
     // }
+    // "Nama": "Fahmi App",
+    // "Telepon": "628515679355",
+    // "Email": "fahmia@g.c",
+    // "Alamat": "Perum wali barokah"
 
     coreApi.charge(req.body)
         .then((chargeResponse) => {

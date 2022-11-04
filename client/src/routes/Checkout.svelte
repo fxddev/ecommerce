@@ -201,45 +201,6 @@
         }
     }
 
-    async function getOngkirJNE() {
-        console.log("destination");
-        console.log(destination);
-
-        const alamat_penjual = JSON.parse(carts[0].alamat_penjual);
-        origin = alamat_penjual.origins.city_id;
-        console.log("origin");
-        console.log(origin);
-
-        // const cred = JSON.parse(get_cred);
-        // const data = cred.data;
-        // const id_pembeli = data.id;
-        // console.log("id_pembeli");
-        // console.log(id_pembeli);
-
-        // const obj = {
-        //     id_pembeli: parseInt(id_pembeli),
-        // };
-        // var payload = JSON.stringify(obj);
-
-        // var config = {
-        //     method: "post",
-        //     url: `${api_url}/keranjang`,
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     data: payload,
-        // };
-        // try {
-        //     const resp = await axios(config);
-        //     const data = await resp.data;
-        //     console.log(data);
-
-        //     // carts = data.data;
-        // } catch (error) {
-        //     console.error(`Axios error..: ${error}`);
-        // }
-    }
-
     // getOngkir();
 
     let weight;
@@ -280,13 +241,115 @@
             console.log(total_tagihan);
         }
     }
-    
-    async function getInvoice(){
+
+    let no_invoice = "";
+    async function getInvoice() {
+        var data = "";
+
+        var config = {
+            method: "post",
+            url: `${api_url}/pesanan/create-invoice`,
+            headers: {},
+            data: data,
+        };
+
+        try {
+            const resp = await axios(config);
+            const data = await resp.data;
+            // console.log(data);
+
+            no_invoice = data.message;
+        } catch (error) {
+            console.error(`Axios error..: ${error}`);
+        }
+    }
+
+    let midtrans_response = {}
+    async function bayarBankMidtrans() {
+        const data = cred.data;
+        const email = data.email;
+        const no_hp = alamat_lengkap_tampil.nomor_hp;
+        console.log("no_hp");
+        console.log(no_hp);
+
+        let item_details = [];
+        for (let i = 0; i < carts.length; i++) {
+            const obj = {
+                id: carts[i].id_product.toString(),
+                price: carts[i].harga,
+                quantity: carts[i].jumlah,
+                name: carts[i].nama_product,
+            };
+            item_details.push(obj);
+        }
+
+        console.log("selected_kurir");
+        console.log(selected_kurir);
+        const obj_kurir = {
+            code: selected_kurir.code,
+            price: parseInt(selected_kurir.value),
+            quantity: 1,
+            name: `${selected_kurir.code} ${selected_kurir.service}`,
+        };
+        item_details.push(obj_kurir);
+
+        const last_no_hp_sub = no_hp.length - 6;
+        console.log("last_no_hp_sub");
+        console.log(last_no_hp_sub);
+        const va_number = no_hp.substr(last_no_hp_sub, no_hp.length);
+        console.log("va_number");
+        console.log(va_number);
+        const obj = {
+            payment_type: "bank_transfer",
+            transaction_details: {
+                gross_amount: parseInt(total_tagihan),
+                order_id: no_invoice.toString(),
+            },
+            customer_details: {
+                email: email,
+                first_name: alamat_lengkap_tampil.nama_penerima,
+                last_name: "App",
+                phone: no_hp,
+            },
+            item_details: item_details,
+            bank_transfer: { bank: "bri", va_number: va_number },
+        };
+
+        var payload = JSON.stringify(obj);
+        console.log(payload);
+
+        var config = {
+            method: "post",
+            url: `${api_url}/midtrans/bayar`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: payload,
+        };
+
+        try {
+            const resp = await axios(config);
+            const data = await resp.data;
+            // console.log(data);
+
+            midtrans_response = data.data;
+            console.log("midtrans_response");
+            console.log(midtrans_response);
+        } catch (error) {
+            console.error(`Axios error..: ${error}`);
+        }
+    }
+
+    async function createPesanan() {
 
     }
 
     async function buatPesanan() {
-
+        await getInvoice();
+        await bayarBankMidtrans();
+        await createPesanan()
+        console.log("no_invoice");
+        console.log(no_invoice);
     }
 </script>
 
@@ -379,7 +442,9 @@
         {#if total_tagihan === 0}
             <button class="btn" disabled="disabled">Buat Pesanan</button>
         {:else}
-            <button class="btn" on:click={() => buatPesanan()}>Buat Pesanan</button>
+            <button class="btn" on:click={() => buatPesanan()}
+                >Buat Pesanan</button
+            >
         {/if}
     </div>
 </div>
