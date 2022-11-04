@@ -259,7 +259,7 @@
         console.log(promise_get_ongkir);
         // }
         // console.log("ongkir");
-        // console.log(ongkir);
+        // console.log(ongkir);s
     }
 
     let selected_kurir = [];
