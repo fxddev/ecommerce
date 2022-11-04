@@ -368,5 +368,10 @@
                 {total_tagihan}
             {/if}
         </p>
+        {#if total_tagihan === 0}
+            <button class="btn" disabled="disabled">Buat Pesanan</button>
+        {:else}
+            <button class="btn">Buat Pesanan</button>
+        {/if}
     </div>
 </div>
