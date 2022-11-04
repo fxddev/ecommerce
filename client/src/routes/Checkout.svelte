@@ -127,16 +127,17 @@
     // https://svelte.dev/tutorial/await-blocks
     let promise_get_carts = getCarts();
 
-    async function getOngkir() {
+    let ongkir = [];
+    async function getOngkir(kurir) {
         console.log("destination");
         console.log(destination);
-        
-        const alamat_penjual = JSON.parse(carts[0].alamat_penjual)
-        origin = alamat_penjual.origins.city_id
-        console.log("origin");
-        console.log(origin);        
 
-        getOngkirJNE()
+        const alamat_penjual = JSON.parse(carts[0].alamat_penjual);
+        origin = alamat_penjual.origins.city_id;
+        console.log("origin");
+        console.log(origin);
+
+        // getOngkirJNE()
 
         // const cred = JSON.parse(get_cred);
         // const data = cred.data;
@@ -144,36 +145,68 @@
         // console.log("id_pembeli");
         // console.log(id_pembeli);
 
-        // const obj = {
-        //     id_pembeli: parseInt(id_pembeli),
-        // };
-        // var payload = JSON.stringify(obj);
+        const obj = {
+            origin: origin.toString(),
+            destination: destination.toString(),
+            weight: weight.toString(),
+            courier: kurir,
+        };
+        var payload = JSON.stringify(obj);
 
-        // var config = {
-        //     method: "post",
-        //     url: `${api_url}/keranjang`,
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     data: payload,
-        // };
-        // try {
-        //     const resp = await axios(config);
-        //     const data = await resp.data;
-        //     console.log(data);
+        var config = {
+            method: "post",
+            url: `${api_url}/rajaongkir/cost`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: payload,
+        };
+        try {
+            const resp = await axios(config);
+            const data = await resp.data;
+            console.log(data);
 
-        //     // carts = data.data;
-        // } catch (error) {
-        //     console.error(`Axios error..: ${error}`);
-        // }
+            const res = data.data.rajaongkir.results;
+            console.log("res");
+            console.log(res);
+            console.log("res.length");
+            console.log(res.length);
+            for (let index = 0; index < res.length; index++) {
+                const costs = res[index].costs;
+                // console.log("costs");
+                // console.log(costs);
+                for (let j = 0; j < costs.length; j++) {
+                    const obj = {
+                        code: res[index].code,
+                        name: res[index].name,
+                        service: costs[j].service,
+                        description: costs[j].description,
+                        value: costs[j].cost[0].value,
+                        etd: costs[j].cost[0].etd,
+                        note: costs[j].cost[0].note,
+                    };
+                    ongkir.push(obj);
+                }
+
+                // ongkir.push(res[index]);
+                // console.log("res[index]");
+                // console.log(res[index]);
+                console.log("ongkir");
+                console.log(ongkir);
+            }
+
+            return res;
+        } catch (error) {
+            console.error(`Axios error..: ${error}`);
+        }
     }
 
     async function getOngkirJNE() {
         console.log("destination");
         console.log(destination);
-        
-        const alamat_penjual = JSON.parse(carts[0].alamat_penjual)
-        origin = alamat_penjual.origins.city_id
+
+        const alamat_penjual = JSON.parse(carts[0].alamat_penjual);
+        origin = alamat_penjual.origins.city_id;
         console.log("origin");
         console.log(origin);
 
@@ -208,18 +241,28 @@
     }
 
     // getOngkir();
- 
-    let weight
-    async function handleKurir(value) {
 
-        weight = value.berat
+    let weight;
+    let promise_get_ongkir;
+    async function handleKurir(value) {
+        ongkir = [];
+
+        weight = value.berat;
         console.log("weight");
         console.log(weight);
         // console.log("value");
         // console.log(value);
 
-        getOngkir();
+        // if (ongkir.length == 0) {
+        promise_get_ongkir = getOngkir("jne");
+        console.log("promise_get_ongkir");
+        console.log(promise_get_ongkir);
+        // }
+        // console.log("ongkir");
+        // console.log(ongkir);
     }
+
+    let selected_kurir;
 </script>
 
 <div>
@@ -234,6 +277,8 @@
                 {alamat_lengkap_tampil.origins.city_name}
             </p>
         {/if}
+
+        
     </div>
     <div>
         {#await promise_get_carts}
@@ -255,13 +300,22 @@
                             <select
                                 class="select w-full max-w-xs"
                                 on:click={() => handleKurir(c)}
+                                bind:value={selected_kurir}
                             >
                                 <option disabled selected>Pengiriman</option>
-                                <option>Homer</option>
-                                <option>Marge</option>
-                                <option>Bart</option>
-                                <option>Lisa</option>
-                                <option>Maggie</option>
+                                {#await promise_get_ongkir}
+                                    <p>...waiting</p>
+                                {:then item_ongkir}
+                                    {#each ongkir as o, i}
+                                        <option value={o}
+                                            >{o.code}
+                                            {o.service} estimasi tiba hingga {o.etd}
+                                            hari Rp.{o.value}</option
+                                        >
+                                    {/each}
+                                {:catch error}
+                                    <p style="color: red">{error.message}</p>
+                                {/await}
                             </select>
                         </div>
                     </div>
@@ -270,5 +324,7 @@
         {:catch error}
             <p style="color: red">{error.message}</p>
         {/await}
+
+        {selected_kurir ? selected_kurir.service : "[waiting...]"}
     </div>
 </div>
