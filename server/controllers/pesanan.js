@@ -2,10 +2,48 @@ const conn = require('../connect')
 
 const jwt = require('jsonwebtoken')
 
+exports.createInv = async (req, res) => {
+
+    conn.query(`SELECT id FROM pesanan ORDER BY id DESC LIMIT 1`, function (error, rows, fields) {
+        if (error) {
+            console.log(error)
+
+            res.status(200).send({
+                message: "Ada Error",
+                data: error
+            });
+        } else {
+
+            // res.status(200).send({
+            //     message: rows[0].id
+            // });
+
+            const d = new Date();
+            let month = d.getMonth();
+            let day = d.getDate()
+            let year = d.getFullYear();
+            let no_invoice = ""
+            if (rows.length === 0) {
+                no_invoice = `INV/${day}${month}${year}/IDP/1`;
+            } else {
+                const new_idp = parseInt(rows[0].id) + 1
+                no_invoice = `INV/${day}${month}${year}/IDP/${new_idp}`;
+            }
+
+            res.status(200).send({
+                message: no_invoice
+            });
+
+        }
+    })
+
+};
+
 exports.create = async (req, res) => {
 
     // {
     //     "id_pembeli": 2,
+    //     "no_invoice": "INV/4102022/IDP/3"
     //     "product_details": [
     //         {
     //             "id": 5,
@@ -37,6 +75,7 @@ exports.create = async (req, res) => {
     // }
 
     const id_pembeli = req.body.id_pembeli;
+    const no_invoice = req.body.no_invoice;
     const product_details = JSON.stringify(req.body.product_details)
     const kurir = JSON.stringify(req.body.kurir)
     const alamat_tujuan = JSON.stringify(req.body.alamat_tujuan)
@@ -50,7 +89,7 @@ exports.create = async (req, res) => {
     const created_at = d.getTime();
     const update_at = d.getTime();
 
-    conn.query(`SELECT id FROM pesanan ORDER BY id DESC LIMIT 1`, function (error, rows, fields) {
+    conn.query(`INSERT INTO pesanan (id_pembeli, no_invoice, product_details, kurir, alamat_tujuan, detail_harga, midtrans_response, no_resi, created_at, update_at) VALUES(${id_pembeli}, "${no_invoice}", '${product_details}', '${kurir}', '${alamat_tujuan}', '${detail_harga}', '${midtrans_response}', "${no_resi}", "${created_at}", "${update_at}")`, function (error, rows, fields) {
         if (error) {
             console.log(error)
 
@@ -60,40 +99,13 @@ exports.create = async (req, res) => {
             });
         } else {
 
-            // res.status(200).send({
-            //     message: rows[0].id
-            // });
-
-            const d = new Date();
-            let month = d.getMonth();
-            let day = d.getDate()
-            let year = d.getFullYear();
-            let no_invoice = ""
-            if (rows.length === 0) {
-                no_invoice = `INV/${day}${month}${year}/IDP/1`;
-            } else {
-                const new_idp = parseInt(rows[0].id)+1
-                no_invoice = `INV/${day}${month}${year}/IDP/${new_idp}`;
-            }
-
-            conn.query(`INSERT INTO pesanan (id_pembeli, no_invoice, product_details, kurir, alamat_tujuan, detail_harga, midtrans_response, no_resi, created_at, update_at) VALUES(${id_pembeli}, "${no_invoice}", '${product_details}', '${kurir}', '${alamat_tujuan}', '${detail_harga}', '${midtrans_response}', "${no_resi}", "${created_at}", "${update_at}")`, function (error, rows, fields) {
-                if (error) {
-                    console.log(error)
-
-                    res.status(200).send({
-                        message: "Ada Error",
-                        data: error
-                    });
-                } else {
-
-                    res.status(200).send({
-                        message: "Berhasil tambah keranjang !"
-                    });
-                }
-            })
-
+            res.status(200).send({
+                message: "Berhasil tambah pesanan !"
+            });
         }
     })
+
+
 
 };
 
