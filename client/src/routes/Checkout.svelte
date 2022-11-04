@@ -262,7 +262,21 @@
         // console.log(ongkir);
     }
 
-    let selected_kurir;
+    let selected_kurir = [];
+
+    let total_tagihan = 0;
+    $: {
+        let harga_barang;
+        for (let i = 0; i < carts.length; i++) {
+            harga_barang = carts[i].harga;
+            console.log("harga_barang");
+            console.log(harga_barang);
+        }
+        const jumlah = parseInt(harga_barang) + parseInt(selected_kurir.value);
+        total_tagihan = jumlah;
+        console.log("total_tagihan");
+        console.log(total_tagihan);
+    }
 </script>
 
 <div>
@@ -277,8 +291,6 @@
                 {alamat_lengkap_tampil.origins.city_name}
             </p>
         {/if}
-
-        
     </div>
     <div>
         {#await promise_get_carts}
@@ -306,7 +318,7 @@
                                 {#await promise_get_ongkir}
                                     <p>...waiting</p>
                                 {:then item_ongkir}
-                                    {#each ongkir as o, i}
+                                    {#each ongkir as o}
                                         <option value={o}
                                             >{o.code}
                                             {o.service} estimasi tiba hingga {o.etd}
@@ -326,5 +338,27 @@
         {/await}
 
         {selected_kurir ? selected_kurir.service : "[waiting...]"}
+    </div>
+
+    <div>
+        <h3>Ringkasan belanja</h3>
+        {#await promise_get_carts}
+            <p>...waiting</p>
+        {:then items_carts}
+            {#each items_carts as c}
+                <p>Total Harga ({items_carts.length} Produk) : {c.harga}</p>
+            {/each}
+        {:catch error}
+            <p style="color: red">{error.message}</p>
+        {/await}
+        <p>
+            Total Ongkos Kirim :
+            {#if selected_kurir.code === undefined}
+                <span>0</span>
+            {:else}
+                {selected_kurir.value}
+            {/if}
+        </p>
+        <p>Total Tagihan : {total_tagihan}</p>
     </div>
 </div>
