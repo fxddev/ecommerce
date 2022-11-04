@@ -280,6 +280,14 @@
             console.log(total_tagihan);
         }
     }
+    
+    async function getInvoice(){
+
+    }
+
+    async function buatPesanan() {
+
+    }
 </script>
 
 <div>
@@ -371,7 +379,7 @@
         {#if total_tagihan === 0}
             <button class="btn" disabled="disabled">Buat Pesanan</button>
         {:else}
-            <button class="btn">Buat Pesanan</button>
+            <button class="btn" on:click={() => buatPesanan()}>Buat Pesanan</button>
         {/if}
     </div>
 </div>
