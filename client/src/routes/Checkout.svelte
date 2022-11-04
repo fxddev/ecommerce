@@ -73,7 +73,6 @@
         if (get_cred === null) {
             navigate(`/login?customer`, { replace: true });
         } else {
-            const cred = JSON.parse(get_cred);
             const data = cred.data;
             const id_pembeli = data.id;
             console.log("id_pembeli");
@@ -264,7 +263,7 @@
         }
     }
 
-    let midtrans_response = {}
+    let midtrans_response = {};
     async function bayarBankMidtrans() {
         const data = cred.data;
         const email = data.email;
@@ -276,8 +275,8 @@
         for (let i = 0; i < carts.length; i++) {
             const obj = {
                 id: carts[i].id_product.toString(),
-                price: carts[i].harga,
-                quantity: carts[i].jumlah,
+                price: parseInt(carts[i].harga),
+                quantity: parseInt(carts[i].jumlah),
                 name: carts[i].nama_product,
             };
             item_details.push(obj);
@@ -289,7 +288,9 @@
             code: selected_kurir.code,
             price: parseInt(selected_kurir.value),
             quantity: 1,
-            name: `${selected_kurir.code} ${selected_kurir.service}`,
+            name: `${selected_kurir.code.toUpperCase()} ${
+                selected_kurir.service
+            }`,
         };
         item_details.push(obj_kurir);
 
@@ -316,6 +317,7 @@
         };
 
         var payload = JSON.stringify(obj);
+        console.log("payload bayarBankMidtrans");
         console.log(payload);
 
         var config = {
@@ -341,13 +343,130 @@
     }
 
     async function createPesanan() {
+        const data = cred.data;
+        const id_pembeli = data.id;
+        console.log("id_pembeli");
+        console.log(id_pembeli);
 
+        let product_details = [];
+        for (let i = 0; i < carts.length; i++) {
+            const obj = {
+                id: carts[i].id_product.toString(),
+                nama: carts[i].nama_product,
+                harga: carts[i].harga,
+                jumlah: carts[i].jumlah,
+            };
+            product_details.push(obj);
+        }
+
+        console.log("selected_kurir");
+        console.log(selected_kurir);
+        let kurir = {};
+        const obj_kurir = {
+            name: `${selected_kurir.code.toUpperCase()} ${
+                selected_kurir.service
+            }`,
+            value: selected_kurir.value.toString(),
+            etd: selected_kurir.etd,
+        };
+        kurir = obj_kurir;
+
+        let harga_barang = "";
+        for (let j = 0; j < carts.length; j++) {
+            if (carts.length === 1) {
+                harga_barang = carts[j].harga;
+            }
+        }
+
+        const obj = {
+            id_pembeli: parseInt(id_pembeli),
+            no_invoice: no_invoice,
+            product_details: product_details,
+            kurir: kurir,
+            alamat_tujuan: alamat_lengkap_tampil,
+            detail_harga: {
+                harga_barang: harga_barang,
+                harga_kurir: selected_kurir.value.toString(),
+                total_harga: total_tagihan.toString(),
+            },
+            midtrans_response: midtrans_response,
+            no_resi: "",
+        };
+
+        var payload = JSON.stringify(obj);
+        console.log("payload createPesanan");
+        console.log(payload);
+
+        var config = {
+            method: "post",
+            url: `${api_url}/pesanan/create`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: payload,
+        };
+
+        try {
+            const resp = await axios(config);
+            const data = await resp.data;
+            console.log(data);
+        } catch (error) {
+            console.error(`Axios error..: ${error}`);
+        }
     }
+
+    // const b = {
+    //     payment_type: "bank_transfer",
+    //     transaction_details: {
+    //         gross_amount: 119000,
+    //         order_id: "INV/4102022/IDP/3",
+    //     },
+    //     customer_details: {
+    //         email: "fahmia@g.c",
+    //         first_name: "Fahmi Daud Abdillah",
+    //         last_name: "App",
+    //         phone: "628515679355",
+    //     },
+    //     item_details: [
+    //         { id: "5", price: 110000, quantity: 1, name: "Kertas" },
+    //         { code: "jne", price: 9000, quantity: 1, name: "JNE REG" },
+    //     ],
+    //     bank_transfer: { bank: "bri", va_number: "679355" },
+    // };
+
+    // const cP = {
+    //     id_pembeli: 2,
+    //     no_invoice: "INV/4102022/IDP/3",
+    //     product_details: [
+    //         { id: "5", nama: "Kertas", harga: "110000", jumlah: "1" },
+    //     ],
+    //     kurir: { name: "JNE REG", value: "9000", etd: "1-2" },
+    //     alamat_tujuan: {
+    //         nama_penerima: "Fahmi Daud Abdillah",
+    //         nomor_hp: "628515679355",
+    //         origins: {
+    //             city_id: "54",
+    //             province_id: "9",
+    //             province: "Jawa Barat",
+    //             type: "Kabupaten",
+    //             city_name: "Bekasi",
+    //             postal_code: "17837",
+    //         },
+    //         alamat_lengkap: "Perum wali barokah blok d 10 17510",
+    //     },
+    //     detail_harga: {
+    //         harga_barang: "110000",
+    //         harga_kurir: "9000",
+    //         total_harga: "119000",
+    //     },
+    //     midtrans_response: {},
+    //     no_resi: "",
+    // };
 
     async function buatPesanan() {
         await getInvoice();
         await bayarBankMidtrans();
-        await createPesanan()
+        await createPesanan();
         console.log("no_invoice");
         console.log(no_invoice);
     }
