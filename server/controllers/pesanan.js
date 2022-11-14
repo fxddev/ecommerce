@@ -118,21 +118,8 @@ exports.gets = async (req, res) => {
 
     conn.query(`
     SELECT
-        pesanan.id,
-        products.nama AS nama_product,
-        products.img,
-        kurir.nama AS nama_kurir,
-        pesanan.alamat_tujuan,
-        pesanan.detail_harga,
-        pesanan.midtrans_response,
-        pesanan.no_resi,
-        pesanan.created_at,
-        pesanan.update_at
+        *
     FROM pesanan
-    INNER JOIN products
-        ON pesanan.id_product = products.id
-    INNER JOIN kurir
-        ON pesanan.id_kurir = kurir.id
     WHERE
     pesanan.id_pembeli = ${id_pembeli}`, async function (error, rows, fields) {
 
