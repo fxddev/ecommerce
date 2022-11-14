@@ -128,8 +128,8 @@ exports.status = async (req, res) => {
 
             res.status(200).send({
                 message: "Sukses !",
-                data: JSON.stringify(chargeResponse),
-                items: chargeResponse
+                data: chargeResponse,
+                // items: JSON.stringify(chargeResponse)
             });
         })
         .catch((e) => {

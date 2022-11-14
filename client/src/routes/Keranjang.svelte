@@ -132,7 +132,7 @@
 
     function handleCheckout() {
         navigate(`/checkout`, { replace: true });
-        cartSelected.update((sendValue) => cart_selected);
+        // cartSelected.update((sendValue) => cart_selected);
     }
 </script>
 
