@@ -42,25 +42,15 @@
                 // console.log(midtrans_res.transaction_id);
                 await getDetailMidtransRes(midtrans_res.transaction_id);
 
-                parseInt(items[i].created_at)
-                var date_unix = new Date(1668392943546 * 1000);
-                console.log("date_unix");
-                console.log(date_unix);
-                
-                console.log(date_unix.toLocaleDateString("default"));
-
-                // // Hours part from the timestamp
-                // var hours = date.getHours();
-                // // Minutes part from the timestamp
-                // var minutes = "0" + date.getMinutes();
-                // // Seconds part from the timestamp
-                // var seconds = "0" + date.getSeconds();
-
-                // // Will display time in 10:30:23 format
-                // var formattedTime =
-                //     hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
-                //     console.log("formattedTime");
-                //     console.log(formattedTime);
+                var buy_date_convert = new Date(parseInt(items[i].created_at)); 
+                console.log("buy_date_convert");
+                console.log(buy_date_convert);
+                const split_buy_date = buy_date_convert.toString().split(" ");
+                console.log("split_buy_date");
+                console.log(split_buy_date);
+                const buy_date = `${split_buy_date[2]} ${split_buy_date[1]} ${split_buy_date[3]}`
+                console.log("buy_date");
+                console.log(buy_date);
 
                 let obj = {};
                 if (temp_newest_midtrans_res.transaction_status === "pending") {
@@ -90,6 +80,7 @@
                         id: items[i].id,
                         id_pembeli: items[i].id_pembeli,
                         no_invoice: items[i].no_invoice,
+                        buy_date: buy_date,
                         product_details: JSON.parse(items[i].product_details),
                         kurir: JSON.parse(items[i].kurir),
                         alamat_tujuan: JSON.parse(items[i].alamat_tujuan),
@@ -105,6 +96,7 @@
                         id: items[i].id,
                         id_pembeli: items[i].id_pembeli,
                         no_invoice: items[i].no_invoice,
+                        buy_date: buy_date,
                         product_details: JSON.parse(items[i].product_details),
                         kurir: JSON.parse(items[i].kurir),
                         alamat_tujuan: JSON.parse(items[i].alamat_tujuan),
