@@ -1,1 +1,6 @@
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis minus deleniti perspiciatis. Voluptate maxime voluptas reiciendis illo veniam sed harum, fuga quidem deserunt, atque quae similique sit tempore. Quos, reprehenderit!
+<script>
+    import Navbar from "../components/pembeli/Navbar.svelte";
+
+</script>
+
+<Navbar />

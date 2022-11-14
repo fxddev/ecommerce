@@ -19,7 +19,7 @@
   import Profile from "./routes/Profile.svelte";
   import Keranjang from "./routes/Keranjang.svelte";
   import Checkout from "./routes/Checkout.svelte";
-    import DaftarTransaksi from "./routes/DaftarTransaksi.svelte";
+  import DaftarTransaksi from "./routes/DaftarTransaksi.svelte";
 
   const get_cred = localStorage.getItem("cred");
   console.log(get_cred);
