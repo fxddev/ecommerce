@@ -33,6 +33,10 @@
       navigate(`/profile`, { replace: true });
     }
   }
+
+  function handleDaftarTransaksi() {
+    navigate(`/transaksi-list`, { replace: true });
+  }
 </script>
 
 <div class="navbar bg-base-100">
@@ -96,7 +100,11 @@
           <li>
             <a class="justify-between" on:click={() => handleProfile()}>
               Profile
-              <span class="badge">New</span>
+            </a>
+          </li>
+          <li>
+            <a class="justify-between" on:click={() => handleDaftarTransaksi()}>
+              Daftar Transaksi
             </a>
           </li>
           <li><a>Settings</a></li>
