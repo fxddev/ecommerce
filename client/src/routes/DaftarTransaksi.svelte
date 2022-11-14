@@ -42,13 +42,13 @@
                 // console.log(midtrans_res.transaction_id);
                 await getDetailMidtransRes(midtrans_res.transaction_id);
 
-                var buy_date_convert = new Date(parseInt(items[i].created_at)); 
+                var buy_date_convert = new Date(parseInt(items[i].created_at));
                 console.log("buy_date_convert");
                 console.log(buy_date_convert);
                 const split_buy_date = buy_date_convert.toString().split(" ");
                 console.log("split_buy_date");
                 console.log(split_buy_date);
-                const buy_date = `${split_buy_date[2]} ${split_buy_date[1]} ${split_buy_date[3]}`
+                const buy_date = `${split_buy_date[2]} ${split_buy_date[1]} ${split_buy_date[3]}`;
                 console.log("buy_date");
                 console.log(buy_date);
 
@@ -153,41 +153,54 @@
         <p>...waiting</p>
     {:then transaksi_list_items}
         {#each transaksi_list as t}
-            <div class="card__">
-                <div class="top__">
-                    <div class="left__">
-                        <span>Belanja </span><span>{t.created_at}</span><span
-                            >{t.no_invoice}</span
-                        >
-                    </div>
-                    <div class="right__">
-                        <span>{t.pay_before_date}</span>
-                    </div>
-                </div>
-                <div class="middle__">
-                    <div class="left__">
-                        <div class="avatar">
-                            <div class="w-24 rounded">
-                                <img
-                                    src="https://placeimg.com/192/192/people"
-                                />
-                            </div>
+            {#if t.midtrans_response.transaction_status != "expire"}
+                <div class="card__">
+                    <div class="top__">
+                        <div class="left__">
+                            <span>Belanja </span>
+                            <span>{t.buy_date} </span>
+                            <span>
+                                {#if t.midtrans_response.transaction_status === "pending"}
+                                    <div class="badge badge-warning gap-2">
+                                        Menunggu pembayaran
+                                    </div>
+                                {:else}
+                                    <div class="badge badge-success gap-2">
+                                        Sukses
+                                    </div>
+                                {/if}
+                            </span>
+                            <span>{t.no_invoice}</span>
+                        </div>
+                        <div class="right__">
+                            <span>Bayar sebelum {t.pay_before_date}</span>
                         </div>
                     </div>
                     <div class="middle__">
-                        <span>{t.product_details.nama}</span>
-                        <span
-                            >{t.product_details.jumlah} barang x {t
-                                .product_details.harga}</span
-                        >
+                        <div class="left__">
+                            <div class="avatar">
+                                <div class="w-24 rounded">
+                                    <img
+                                        src="https://placeimg.com/192/192/people"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="middle__">
+                            <span>{t.product_details.nama}</span>
+                            <span
+                                >{t.product_details.jumlah} barang x {t
+                                    .product_details.harga}</span
+                            >
+                        </div>
+                        <div class="right__">
+                            <span>Total Belanja</span>
+                            <span>Rp. {t.detail_harga.total_harga}</span>
+                        </div>
                     </div>
-                    <div class="right__">
-                        <span>Total Belanja</span>
-                        <span>Rp. {t.detail_harga.total_harga}</span>
-                    </div>
+                    <div class="bottom__" />
                 </div>
-                <div class="bottom__" />
-            </div>
+            {/if}
         {/each}
     {:catch error}
         <p style="color: red">{error.message}</p>
@@ -200,5 +213,10 @@
         padding-top: 80px;
         flex-direction: column;
         gap: 20px;
+    }
+
+    .container__ .card__ .top__ {
+        display: flex;
+        justify-content: space-between;
     }
 </style>
