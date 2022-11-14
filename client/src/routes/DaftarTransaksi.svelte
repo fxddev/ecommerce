@@ -41,19 +41,77 @@
                 const midtrans_res = JSON.parse(items[i].midtrans_response);
                 // console.log(midtrans_res.transaction_id);
                 await getDetailMidtransRes(midtrans_res.transaction_id);
-                const obj = {
-                    id: items[i].id,
-                    id_pembeli: items[i].id_pembeli,
-                    no_invoice: items[i].no_invoice,
-                    product_details: JSON.parse(items[i].product_details),
-                    kurir: JSON.parse(items[i].kurir),
-                    alamat_tujuan: JSON.parse(items[i].alamat_tujuan),
-                    detail_harga: JSON.parse(items[i].detail_harga),
-                    midtrans_response: temp_newest_midtrans_res,
-                    no_resi: items[i].no_resi,
-                    created_at: items[i].created_at,
-                    update_at: items[i].update_at,
-                };
+
+                var date = new Date(items[i].created_at * 1000);
+                console.log("date");
+                console.log(date);
+                // Hours part from the timestamp
+                var hours = date.getHours();
+                // Minutes part from the timestamp
+                var minutes = "0" + date.getMinutes();
+                // Seconds part from the timestamp
+                var seconds = "0" + date.getSeconds();
+
+                // Will display time in 10:30:23 format
+                var formattedTime =
+                    hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
+                    console.log("formattedTime");
+                    console.log(formattedTime);
+
+                let obj = {};
+                if (temp_newest_midtrans_res.transaction_status === "pending") {
+                    console.log("temp_newest_midtrans_res.transaction_time");
+                    console.log(temp_newest_midtrans_res.transaction_time);
+
+                    const order_date =
+                        temp_newest_midtrans_res.transaction_time;
+                    const split_order_date = order_date.split("-");
+                    console.log("split");
+                    console.log(split_order_date);
+
+                    const get_tgl_order = split_order_date[2].split(" ")[0];
+                    console.log("get_tgl_order");
+                    console.log(get_tgl_order);
+
+                    const tgl_new = parseInt(get_tgl_order) + 1;
+                    const pay_before_date = `${tgl_new}-${
+                        split_order_date[1]
+                    }-${split_order_date[0]} ${
+                        split_order_date[2].split(" ")[1]
+                    }`;
+                    console.log("pay_before_date");
+                    console.log(pay_before_date);
+
+                    obj = {
+                        id: items[i].id,
+                        id_pembeli: items[i].id_pembeli,
+                        no_invoice: items[i].no_invoice,
+                        product_details: JSON.parse(items[i].product_details),
+                        kurir: JSON.parse(items[i].kurir),
+                        alamat_tujuan: JSON.parse(items[i].alamat_tujuan),
+                        detail_harga: JSON.parse(items[i].detail_harga),
+                        midtrans_response: temp_newest_midtrans_res,
+                        pay_before_date: pay_before_date,
+                        no_resi: items[i].no_resi,
+                        created_at: items[i].created_at,
+                        update_at: items[i].update_at,
+                    };
+                } else {
+                    obj = {
+                        id: items[i].id,
+                        id_pembeli: items[i].id_pembeli,
+                        no_invoice: items[i].no_invoice,
+                        product_details: JSON.parse(items[i].product_details),
+                        kurir: JSON.parse(items[i].kurir),
+                        alamat_tujuan: JSON.parse(items[i].alamat_tujuan),
+                        detail_harga: JSON.parse(items[i].detail_harga),
+                        midtrans_response: temp_newest_midtrans_res,
+                        no_resi: items[i].no_resi,
+                        created_at: items[i].created_at,
+                        update_at: items[i].update_at,
+                    };
+                }
+
                 transaksi_list.push(obj);
             }
             console.log("transaksi_list");
@@ -99,7 +157,41 @@
         <p>...waiting</p>
     {:then transaksi_list_items}
         {#each transaksi_list as t}
-            {t.id}
+            <div class="card__">
+                <div class="top__">
+                    <div class="left__">
+                        <span>Belanja </span><span>{t.created_at}</span><span
+                            >{t.no_invoice}</span
+                        >
+                    </div>
+                    <div class="right__">
+                        <span>{t.pay_before_date}</span>
+                    </div>
+                </div>
+                <div class="middle__">
+                    <div class="left__">
+                        <div class="avatar">
+                            <div class="w-24 rounded">
+                                <img
+                                    src="https://placeimg.com/192/192/people"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="middle__">
+                        <span>{t.product_details.nama}</span>
+                        <span
+                            >{t.product_details.jumlah} barang x {t
+                                .product_details.harga}</span
+                        >
+                    </div>
+                    <div class="right__">
+                        <span>Total Belanja</span>
+                        <span>Rp. {t.detail_harga.total_harga}</span>
+                    </div>
+                </div>
+                <div class="bottom__" />
+            </div>
         {/each}
     {:catch error}
         <p style="color: red">{error.message}</p>
@@ -110,5 +202,7 @@
     .container__ {
         display: flex;
         padding-top: 80px;
+        flex-direction: column;
+        gap: 20px;
     }
 </style>
