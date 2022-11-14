@@ -42,21 +42,25 @@
                 // console.log(midtrans_res.transaction_id);
                 await getDetailMidtransRes(midtrans_res.transaction_id);
 
-                var date = new Date(items[i].created_at * 1000);
-                console.log("date");
-                console.log(date);
-                // Hours part from the timestamp
-                var hours = date.getHours();
-                // Minutes part from the timestamp
-                var minutes = "0" + date.getMinutes();
-                // Seconds part from the timestamp
-                var seconds = "0" + date.getSeconds();
+                parseInt(items[i].created_at)
+                var date_unix = new Date(1668392943546 * 1000);
+                console.log("date_unix");
+                console.log(date_unix);
+                
+                console.log(date_unix.toLocaleDateString("default"));
 
-                // Will display time in 10:30:23 format
-                var formattedTime =
-                    hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
-                    console.log("formattedTime");
-                    console.log(formattedTime);
+                // // Hours part from the timestamp
+                // var hours = date.getHours();
+                // // Minutes part from the timestamp
+                // var minutes = "0" + date.getMinutes();
+                // // Seconds part from the timestamp
+                // var seconds = "0" + date.getSeconds();
+
+                // // Will display time in 10:30:23 format
+                // var formattedTime =
+                //     hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
+                //     console.log("formattedTime");
+                //     console.log(formattedTime);
 
                 let obj = {};
                 if (temp_newest_midtrans_res.transaction_status === "pending") {
