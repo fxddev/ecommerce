@@ -177,28 +177,63 @@
                         </div>
                     </div>
                     <div class="middle__">
-                        <div class="left__">
-                            <div class="avatar">
-                                <div class="w-24 rounded">
-                                    <img
-                                        src="https://placeimg.com/192/192/people"
-                                    />
+                        {#each t.product_details as p}
+                            <div class="left__">
+                                <div class="left__">
+                                    <div class="avatar">
+                                        <div class="w-24 rounded">
+                                            <img
+                                                src="https://placeimg.com/192/192/people"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right__">
+                                    <span>{p.nama}</span>
+                                    <span>{p.jumlah} barang x {p.harga}</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="middle__">
-                            <span>{t.product_details.nama}</span>
-                            <span
-                                >{t.product_details.jumlah} barang x {t
-                                    .product_details.harga}</span
-                            >
+
+                            <div class="right__">
+                                <!-- <div class="avatar"> -->
+                                <div class="w-24 rounded">
+                                    <img
+                                        src="https://ecs7.tokopedia.net/img/toppay/payment-logo/briva.png"
+                                    />
+                                </div>
+                                <!-- </div> -->
+                                <div>
+                                    <span>{t.midtrans_response.va_numbers[0].va_number}</span>
+                                </div>
+                            </div>
+                        {/each}
+                    </div>
+                    <div class="bottom__">
+                        <div class="left__">
+                            <span>
+                                {#if t.midtrans_response.transaction_status === "pending"}
+                                    Total Pembayaran
+                                {:else}
+                                    Total Belanja
+                                {/if}
+                            </span>
+                            <span>
+                                {#if t.midtrans_response.transaction_status === "pending"}
+                                    Rp, {t.midtrans_response.gross_amount}
+                                {:else}
+                                    Rp. {t.detail_harga.total_harga}
+                                {/if}
+                            </span>
                         </div>
                         <div class="right__">
-                            <span>Total Belanja</span>
-                            <span>Rp. {t.detail_harga.total_harga}</span>
+                            <button class="btn btn-ghost"
+                                >Lihat Detail Transaksi</button
+                            >
+                            {#if t.midtrans_response.transaction_status === "success"}
+                                <button class="btn">Beri Ulasan</button>
+                            {/if}
                         </div>
                     </div>
-                    <div class="bottom__" />
                 </div>
             {/if}
         {/each}
@@ -216,6 +251,37 @@
     }
 
     .container__ .card__ .top__ {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .container__ .card__ .middle__ {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .container__ .card__ .left__ {
+        display: flex;
+        gap: 20px;
+    }
+
+    .container__ .card__ .middle__ .left__ .right__ {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container__ .card__ .middle__ .right__ {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container__ .card__ .right__ {
+        display: flex;
+        gap: 10px;
+        padding-right: 15px;
+    }
+
+    .container__ .card__ .bottom__ {
         display: flex;
         justify-content: space-between;
     }
