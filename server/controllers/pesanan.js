@@ -111,17 +111,35 @@ exports.create = async (req, res) => {
 
 exports.gets = async (req, res) => {
 
+    // penjual
     // {
-    //     "id_pembeli": 1
+    //         "role_id": 2
+    //     }
+    
+    // pembeli
+    // {
+    //     "id_pembeli": 1,
+    //     "role_id": 3
     // }
-    const id_pembeli = req.body.id_pembeli;
 
-    conn.query(`
-    SELECT
-        *
-    FROM pesanan
-    WHERE
-    pesanan.id_pembeli = ${id_pembeli}`, async function (error, rows, fields) {
+    const role_id = req.body.role_id;
+
+    let query = ""
+    if (parseInt(role_id) === 2) {
+        query = "SELECT * FROM pesanan"
+    }  else {
+
+        const id_pembeli = req.body.id_pembeli;
+
+        query = `
+        SELECT
+            *
+        FROM pesanan
+        WHERE
+        pesanan.id_pembeli = ${id_pembeli}`
+    }
+
+    conn.query(query, async function (error, rows, fields) {
 
         if (error) {
             res.status(200).send({

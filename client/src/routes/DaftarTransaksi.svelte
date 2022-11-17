@@ -13,8 +13,12 @@
     async function getTransaksiList() {
         const data = cred.data;
         const id_pembeli = data.id;
+        const role_id = data.role_id;
 
-        var payload = JSON.stringify({ id_pembeli: parseInt(id_pembeli) });
+        var payload = JSON.stringify({
+            id_pembeli: parseInt(id_pembeli),
+            role_id: parseInt(role_id),
+        });
 
         var config = {
             method: "post",
@@ -203,7 +207,10 @@
                                 </div>
                                 <!-- </div> -->
                                 <div>
-                                    <span>{t.midtrans_response.va_numbers[0].va_number}</span>
+                                    <span
+                                        >{t.midtrans_response.va_numbers[0]
+                                            .va_number}</span
+                                    >
                                 </div>
                             </div>
                         {/each}
@@ -235,8 +242,7 @@
                         </div>
                     </div>
                 </div>
-
-                {:else}
+            {:else}
                 oops belum ada transaksi
             {/if}
         {/each}
