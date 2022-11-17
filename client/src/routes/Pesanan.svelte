@@ -178,6 +178,19 @@
             }
         }
     }
+
+    async function prosesTransaksi() {
+        var payload = JSON.stringify({ id: 5, is_selesai: "true" });
+
+        var config = {
+            method: "post",
+            url: `${api_url}/pesanan/update`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: payload,
+        };
+    }
 </script>
 
 {#await promise_get_transaksi}
