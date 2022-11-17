@@ -235,6 +235,9 @@
                         </div>
                     </div>
                 </div>
+
+                {:else}
+                oops belum ada transaksi
             {/if}
         {/each}
     {:catch error}
