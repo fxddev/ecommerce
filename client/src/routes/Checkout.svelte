@@ -508,6 +508,8 @@
 
         is_buat_psnan = false;
         msg_btn_psn = "Sukses";
+
+        navigate(`/transaksi-list`, { replace: true });
     }
 </script>
 
