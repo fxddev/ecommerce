@@ -179,8 +179,14 @@
         }
     }
 
-    async function prosesTransaksi() {
-        var payload = JSON.stringify({ id: 5, is_selesai: "true" });
+    let is_btn_proses = false;
+    async function prosesTransaksi(id_pesanan) {
+        is_btn_proses = true;
+
+        var payload = JSON.stringify({
+            id: parseInt(id_pesanan),
+            is_proses: "true",
+        });
 
         var config = {
             method: "post",
@@ -190,6 +196,21 @@
             },
             data: payload,
         };
+
+        try {
+            const resp = await axios(config);
+            const data = await resp.data;
+            console.log("data");
+            console.log(data);
+
+            temp_newest_midtrans_res = {};
+            transaksi_list = [];
+
+            let promise_get_transaksi = getTransaksiList();
+            is_btn_proses = false;
+        } catch (error) {
+            console.error(`Axios error..: ${error}`);
+        }
     }
 </script>
 
@@ -225,7 +246,18 @@
                             <td>
                                 <button class="btn btn-ghost">Detail</button>
                                 {#if t.is_proses === ""}
-                                    <button class="btn">Proses</button>
+                                    {#if is_btn_proses}
+                                        <button class="btn loading"
+                                            >loading</button
+                                        >
+                                    {:else}
+                                        <button
+                                            class="btn"
+                                            on:click={() =>
+                                                prosesTransaksi(t.id)}
+                                            >Proses</button
+                                        >
+                                    {/if}
                                 {:else if t.no_resi === ""}
                                     <button class="btn">Kirim</button>
                                 {:else if t.is_selesai === ""}
