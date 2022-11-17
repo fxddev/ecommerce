@@ -91,6 +91,7 @@
                         detail_harga: JSON.parse(items[i].detail_harga),
                         midtrans_response: temp_newest_midtrans_res,
                         pay_before_date: pay_before_date,
+                        is_proses: items[i].is_proses,
                         no_resi: items[i].no_resi,
                         created_at: items[i].created_at,
                         update_at: items[i].update_at,
@@ -106,6 +107,7 @@
                         alamat_tujuan: JSON.parse(items[i].alamat_tujuan),
                         detail_harga: JSON.parse(items[i].detail_harga),
                         midtrans_response: temp_newest_midtrans_res,
+                        is_proses: items[i].is_proses,
                         no_resi: items[i].no_resi,
                         created_at: items[i].created_at,
                         update_at: items[i].update_at,
@@ -116,6 +118,8 @@
             }
             console.log("transaksi_list");
             console.log(transaksi_list);
+
+            checkNothingTransaction();
             return transaksi_list;
         } catch (error) {
             console.error(`Axios error..: ${error}`);
@@ -148,6 +152,20 @@
             console.error(`Axios error..: ${error}`);
         }
     }
+
+    let is_nothing_transactions = true;
+    async function checkNothingTransaction() {
+        for (let i = 0; i < transaksi_list.length; i++) {
+            if (
+                transaksi_list[i].midtrans_response.transaction_status ===
+                    "settlement" ||
+                transaksi_list[i].midtrans_response.transaction_status ===
+                    "pending"
+            ) {
+                is_nothing_transactions = false;
+            }
+        }
+    }
 </script>
 
 <Navbar />
@@ -156,6 +174,9 @@
     {#await promise_get_transaksi}
         <p>...waiting</p>
     {:then transaksi_list_items}
+        {#if is_nothing_transactions}
+            Oops tidak ada transaksi
+        {/if}
         {#each transaksi_list as t}
             {#if t.midtrans_response.transaction_status != "expire"}
                 <div class="card__">
@@ -168,16 +189,34 @@
                                     <div class="badge badge-warning gap-2">
                                         Menunggu pembayaran
                                     </div>
-                                {:else}
-                                    <div class="badge badge-success gap-2">
-                                        Sukses
-                                    </div>
+                                {:else if t.midtrans_response.transaction_status === "settlement"}
+                                    {#if t.is_proses === "true"}
+                                        {#if t.no_resi === ""}
+                                            <div
+                                                class="badge badge-success gap-2"
+                                            >
+                                                Diproses
+                                            </div>
+                                        {:else}
+                                            <div
+                                                class="badge badge-success gap-2"
+                                            >
+                                                Sedang dikirim
+                                            </div>
+                                        {/if}
+                                    {:else}
+                                        <div class="badge badge-success gap-2">
+                                            Menunggu konfirmasi
+                                        </div>
+                                    {/if}
                                 {/if}
                             </span>
                             <span>{t.no_invoice}</span>
                         </div>
                         <div class="right__">
-                            <span>Bayar sebelum {t.pay_before_date}</span>
+                            {#if t.midtrans_response.transaction_status === "pending"}
+                                <span>Bayar sebelum {t.pay_before_date}</span>
+                            {/if}
                         </div>
                     </div>
                     <div class="middle__">
@@ -199,19 +238,19 @@
                             </div>
 
                             <div class="right__">
-                                <!-- <div class="avatar"> -->
-                                <div class="w-24 rounded">
-                                    <img
-                                        src="https://ecs7.tokopedia.net/img/toppay/payment-logo/briva.png"
-                                    />
-                                </div>
-                                <!-- </div> -->
-                                <div>
-                                    <span
-                                        >{t.midtrans_response.va_numbers[0]
-                                            .va_number}</span
-                                    >
-                                </div>
+                                {#if t.midtrans_response.transaction_status === "pending"}
+                                    <div class="w-24 rounded">
+                                        <img
+                                            src="https://ecs7.tokopedia.net/img/toppay/payment-logo/briva.png"
+                                        />
+                                    </div>
+                                    <div>
+                                        <span
+                                            >{t.midtrans_response.va_numbers[0]
+                                                .va_number}</span
+                                        >
+                                    </div>
+                                {/if}
                             </div>
                         {/each}
                     </div>
@@ -242,8 +281,6 @@
                         </div>
                     </div>
                 </div>
-            {:else}
-                oops belum ada transaksi
             {/if}
         {/each}
     {:catch error}
