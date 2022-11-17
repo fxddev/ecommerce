@@ -181,6 +181,9 @@
 
     let is_btn_proses = false;
     async function prosesTransaksi(id_pesanan) {
+        console.log("Sedang klik proses dg id_pesanan=");
+        console.log(id_pesanan);
+
         is_btn_proses = true;
 
         var payload = JSON.stringify({
@@ -238,7 +241,7 @@
                 {#each transaksi_list as t, i}
                     {#if t.midtrans_response.transaction_status != "expire" && t.midtrans_response.transaction_status != "pending"}
                         <tr>
-                            <th>{i}</th>
+                            <th />
                             <td>{t.product_details[0].nama}</td>
                             <td>{t.product_details[0].harga}</td>
                             <td>{t.product_details[0].jumlah}</td>
@@ -259,7 +262,9 @@
                                         >
                                     {/if}
                                 {:else if t.no_resi === ""}
-                                    <button class="btn">Kirim</button>
+                                    <label for="my-modal-4" class="btn"
+                                        >Kirim</label
+                                    >
                                 {:else if t.is_selesai === ""}
                                     <button class="btn" disabled="disabled"
                                         >Sedang dikirim</button
@@ -279,3 +284,15 @@
 {:catch error}
     <p style="color: red">{error.message}</p>
 {/await}
+
+<!-- Put this part before </body> tag -->
+<input type="checkbox" id="my-modal-4" class="modal-toggle" />
+<label for="my-modal-4" class="modal cursor-pointer">
+    <label class="modal-box relative" for="">
+        <h3 class="text-lg font-bold">Congratulations random Internet user!</h3>
+        <p class="py-4">
+            You've been selected for a chance to get one year of subscription to
+            use Wikipedia for free!
+        </p>
+    </label>
+</label>
