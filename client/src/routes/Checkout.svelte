@@ -463,12 +463,51 @@
     //     no_resi: "",
     // };
 
+    async function deleteKeranjang() {
+        let array = [];
+        for (let i = 0; i < carts.length; i++) {
+            const obj = {
+                id: parseInt(carts[i].id_keranjang),
+            };
+            array.push(obj);
+        }
+
+        console.log("array dari keranjang yg akan dihapus");
+        console.log(array);
+
+        var payload = JSON.stringify(array);
+
+        var config = {
+            method: "post",
+            url: `${api_url}/keranjang/deletes`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: payload,
+        };
+
+        try {
+            const resp = await axios(config);
+            const data = await resp.data;
+            console.log(data);
+        } catch (error) {
+            console.error(`Axios error..: ${error}`);
+        }
+    }
+
+    let is_buat_psnan = false;
+    let msg_btn_psn = "Buat Pesanan";
     async function buatPesanan() {
+        is_buat_psnan = true;
         await getInvoice();
         await bayarBankMidtrans();
         await createPesanan();
+        await deleteKeranjang();
         console.log("no_invoice");
         console.log(no_invoice);
+
+        is_buat_psnan = false;
+        msg_btn_psn = "Sukses";
     }
 </script>
 
@@ -560,9 +599,11 @@
         </p>
         {#if total_tagihan === 0}
             <button class="btn" disabled="disabled">Buat Pesanan</button>
+        {:else if is_buat_psnan}
+            <button class="btn loading">loading</button>
         {:else}
             <button class="btn" on:click={() => buatPesanan()}
-                >Buat Pesanan</button
+                >{msg_btn_psn}</button
             >
         {/if}
     </div>
