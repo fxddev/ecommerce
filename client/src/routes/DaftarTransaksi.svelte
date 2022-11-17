@@ -93,6 +93,7 @@
                         pay_before_date: pay_before_date,
                         is_proses: items[i].is_proses,
                         no_resi: items[i].no_resi,
+                        is_selesai: items[i].is_selesai,
                         created_at: items[i].created_at,
                         update_at: items[i].update_at,
                     };
@@ -109,6 +110,7 @@
                         midtrans_response: temp_newest_midtrans_res,
                         is_proses: items[i].is_proses,
                         no_resi: items[i].no_resi,
+                        is_selesai: items[i].is_selesai,
                         created_at: items[i].created_at,
                         update_at: items[i].update_at,
                     };

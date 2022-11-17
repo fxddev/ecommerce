@@ -102,7 +102,9 @@
                         detail_harga: JSON.parse(items[i].detail_harga),
                         midtrans_response: temp_newest_midtrans_res,
                         pay_before_date: pay_before_date,
+                        is_proses: items[i].is_proses,
                         no_resi: items[i].no_resi,
+                        is_selesai: items[i].is_selesai,
                         created_at: items[i].created_at,
                         update_at: items[i].update_at,
                     };
@@ -117,7 +119,9 @@
                         alamat_tujuan: JSON.parse(items[i].alamat_tujuan),
                         detail_harga: JSON.parse(items[i].detail_harga),
                         midtrans_response: temp_newest_midtrans_res,
+                        is_proses: items[i].is_proses,
                         no_resi: items[i].no_resi,
+                        is_selesai: items[i].is_selesai,
                         created_at: items[i].created_at,
                         update_at: items[i].update_at,
                     };
@@ -182,31 +186,51 @@
     {#if is_nothing_transactions}
         Oops tidak ada transaksi
     {/if}
-    {#each transaksi_list as t}
-        {#if t.midtrans_response.transaction_status != "expire" && t.midtrans_response.transaction_status != "pending"}
-            <div class="overflow-x-auto">
-                <table class="table w-full">
-                    <!-- head -->
-                    <thead>
+
+    <div class="overflow-x-auto">
+        <table class="table w-full">
+            <!-- head -->
+            <thead>
+                <tr>
+                    <th />
+                    <th>Nama</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Total Harga</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each transaksi_list as t, i}
+                    {#if t.midtrans_response.transaction_status != "expire" && t.midtrans_response.transaction_status != "pending"}
                         <tr>
-                            <th />
-                            <th>Name</th>
-                            <th>Job</th>
-                            <th>Favorite Color</th>
+                            <th>{i}</th>
+                            <td>{t.product_details[0].nama}</td>
+                            <td>{t.product_details[0].harga}</td>
+                            <td>{t.product_details[0].jumlah}</td>
+                            <td>{t.detail_harga.total_harga}</td>
+                            <td>
+                                <button class="btn btn-ghost">Detail</button>
+                                {#if t.is_proses === ""}
+                                    <button class="btn">Proses</button>
+                                {:else if t.no_resi === ""}
+                                    <button class="btn">Kirim</button>
+                                {:else if t.is_selesai === ""}
+                                    <button class="btn" disabled="disabled"
+                                        >Sedang dikirim</button
+                                    >
+                                {:else}
+                                    <button class="btn" disabled="disabled"
+                                        >Selesai</button
+                                    >
+                                {/if}
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>Cy Ganderton</td>
-                            <td>Quality Control Specialist</td>
-                            <td>Blue</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        {/if}
-    {/each}
+                    {/if}
+                {/each}
+            </tbody>
+        </table>
+    </div>
 {:catch error}
     <p style="color: red">{error.message}</p>
 {/await}
