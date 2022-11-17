@@ -199,11 +199,17 @@
                                             >
                                                 Diproses
                                             </div>
-                                        {:else}
+                                        {:else if t.is_selesai === ""}
                                             <div
                                                 class="badge badge-success gap-2"
                                             >
                                                 Sedang dikirim
+                                            </div>
+                                        {:else}
+                                            <div
+                                                class="badge badge-success gap-2"
+                                            >
+                                                Selesai
                                             </div>
                                         {/if}
                                     {:else}
@@ -274,10 +280,13 @@
                             </span>
                         </div>
                         <div class="right__">
-                            <button class="btn btn-ghost"
-                                >Lihat Detail Transaksi</button
-                            >
-                            {#if t.midtrans_response.transaction_status === "success"}
+                            <button class="btn btn-ghost">Detail</button>
+                            {#if t.no_resi != "" && t.is_selesai === ""}
+                                <button class="btn btn-active"
+                                    >Selesaikan pesanan</button
+                                >
+                            {/if}
+                            {#if t.is_selesai === "true"}
                                 <button class="btn">Beri Ulasan</button>
                             {/if}
                         </div>

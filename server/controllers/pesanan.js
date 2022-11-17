@@ -229,24 +229,61 @@ exports.gets = async (req, res) => {
 // versiBaru
 exports.update = async (req, res) => {
 
-    // {
-    //     "id": 2,
-    //     "no_resi": "#GDYGY#6474748",
-    // }
+    let query = ""
 
-    console.log(req.body.no_resi);
-    // if (req.body.no_resi)
+    const id = req.body.id;
+
+    const d = new Date();
+    const update_at = d.getTime();
 
     
     // {
     //     "id": 2,
-    //     "is_proses": "true",
+    //     "is_proses": "true"
     // }
+    if (req.body.is_proses != undefined) {
+        const is_proses = req.body.is_proses;
+
+        query = `
+        UPDATE pesanan 
+        SET 
+        is_proses="${is_proses}", update_at="${update_at}" 
+        WHERE 
+        id = ${id}`
+    }
+
 
     // {
     //     "id": 2,
-    //     "is_selesai": "true",
+    //     "no_resi": "#GDYGY#6474748"
     // }
+
+    // console.log(req.body.no_resi)
+    if (req.body.no_resi != undefined) {
+        const no_resi = req.body.no_resi;
+
+        query = `
+        UPDATE pesanan 
+        SET 
+        no_resi="${no_resi}", update_at="${update_at}" 
+        WHERE 
+        id = ${id}`
+    }
+    
+    // {
+    //     "id": 2,
+    //     "is_selesai": "true"
+    // }
+    if (req.body.is_selesai != undefined) {
+        const is_selesai = req.body.is_selesai;
+
+        query = `
+        UPDATE pesanan 
+        SET 
+        is_selesai="${is_selesai}", update_at="${update_at}" 
+        WHERE 
+        id = ${id}`
+    }
 
 
     // {
@@ -286,24 +323,19 @@ exports.update = async (req, res) => {
     // const d = new Date();
     // const update_at = d.getTime();
 
-    // conn.query(`UPDATE pesanan 
-    // SET 
-    // id_product=${id_product}, id_pembeli=${id_pembeli}, midtrans_response='${midtrans_response}', id_kurir=${id_kurir}, alamat_tujuan='${alamat_tujuan}', detail_harga='${detail_harga}',no_resi="${no_resi}", created_at="${created_at}", update_at="${update_at}" 
-    // WHERE 
-    // id = ${id}`, function (error, rows, fields) {
-    //     if (error) {
-    //         console.log(error)
+    conn.query(query, function (error, rows, fields) {
+        if (error) {
+            console.log(error)
 
-    //         res.status(200).send({
-    //             message: "Ada Error",
-    //             data: error
-    //         });
-    //     } else {
-
-    //         res.status(200).send({
-    //             message: "Berhasil update pesanan !"
-    //         });
-    //     }
-    // })
+            res.status(200).send({
+                message: "Ada Error",
+                data: error
+            });
+        } else {
+            res.status(200).send({
+                message: "Berhasil update pesanan !"
+            });
+        }
+    })
 
 };
